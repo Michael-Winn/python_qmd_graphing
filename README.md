@@ -2,7 +2,11 @@ These functions and files are used to input the data created by the QMD part of 
 ### TO DO LIST
 
 [ ] Add the density outputs, and make one generalised plotting file
+
 [ ] Add the ability to turn off and on the output of the plots to .png 
+
 [ ] Look into the possibility of outputting directly to pdf
+
 [ ] Give better names to saved outputs
+
 
