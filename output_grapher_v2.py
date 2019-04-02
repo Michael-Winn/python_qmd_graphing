@@ -17,7 +17,7 @@ from tools.graph_names import *
 
 ########################################################### INPUT FILES
 current_working_dir = '../altered_version_v11'
-wptp =2
+wptp =1
 number_of_files_to_import = 6
 data = []
 plot_info = []
@@ -86,15 +86,15 @@ if(wptp == 1 or wptp == 3) :
       plt.ylabel('energy (MeV)')
       plt.title("Variation of the ASYMMETRY energy ")
   
-      if(i != 0 and i%2 !=0 ): 
+#      if(i != 0 and i%2 !=0 ): 
   #     fig.tight_layout()
   #     plt.subplots_adjust(top=0.8)
   #     plt.savefig('output_graphs_python/constant/' + str(i)+'.png',dpi=fig.dpi,bbox_extra_artists=(title,),bbox_inches='tight')
-       plt.savefig('output_graphs_python/constant/' + str(i)+'.png')
+#       plt.savefig('output_graphs_python/constant/' + str(i)+'.png')
       
   
   ############################################################ SHOW PLOTS 
-  #plt.show()
+plt.show()
 ############################ SECOND SERIES OF PLOTS 
 if(wptp ==2 or wptp ==3) :
   number_of_files_to_import = 6
@@ -165,12 +165,12 @@ if(wptp ==2 or wptp ==3) :
       plt.ylabel('energy (MeV)')
       plt.title("Variation of the ASYMMETRY energy ")
   
-      if(i != 0 and i%2 !=0 ): 
-        print('in save {0}'.format(i))
+#      if(i != 0 and i%2 !=0 ): 
+#        print('in save {0}'.format(i))
   #      plt.subplots_adjust(top=0.8)
   #      plt.savefig('output_graphs_python/variable/' + str(i)+'.png',bbox_inches='tight')
-        plt.savefig('output_graphs_python/variable/' + str(i)+'.png')
+#        plt.savefig('output_graphs_python/variable/' + str(i)+'.png')
   
 ########################################################### SHOW PLOTS 
 
-#plt.show()
+plt.show()
