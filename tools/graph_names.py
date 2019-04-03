@@ -11,7 +11,7 @@ def graph_settings(number_of_graphs):
       v_name.append("Total system coulomb energy STATIC")
       v_name.append("Total system momentum energy STATIC")
       v_name.append("Total system asymmetry energy STATIC")
-      v_color = "red"
+      v_color = "purple"
       v_linestyle = "-"
       v_marker = ""
       v_name = []
@@ -22,7 +22,7 @@ def graph_settings(number_of_graphs):
       v_name.append("Total system coulomb energy MOMENTUM")
       v_name.append("Total system momentum energy MOMENTUM")
       v_name.append("Total system asymmetry energy MOMENTUM")
-      v_color = "red"
+      v_color = "orange"
       v_linestyle = ""
       v_marker = "o"
       plot_info.append([v_name,v_color,v_linestyle,v_marker])
