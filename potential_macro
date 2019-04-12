@@ -1,0 +1,20 @@
+# Gnuplot version 5.0 demo of multiplot auto-layout capability
+#
+#
+reset
+
+set style line 11 lc rgb '#808080' lt 1
+set border 3 back ls 11
+set tics nomirror
+set style line 12 lc rgb '#808080' lt 0 lw 1
+set grid back ls 12
+
+set style line 1 lc rgb  '#C70039' pt 7 ps 1 lt 1 lw 2 # --- red
+set style line 3 lc rgb  '#581845' pt 7 ps 1 lt 1 lw 2 # --- purple
+
+set xlabel 'time step (fm)'
+set ylabel 'Energy (Mev)'
+set title "ENERGY VARIATIONS FOR POTENTIAL TESTING B=20 NUM = 1 BENE = 250 MeV" 
+plot '../altered_version_v11/xxx3/xxx3-1/prop_out_1.dat' u 1:3 every 15:15 w p ls 1 ,\
+ '../altered_version_v11/xxx4/xxx4-1/prop_out_1.dat' u 1:3 every 15:15 w l ls 3
+reset
