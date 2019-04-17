@@ -5,62 +5,38 @@ from mpl_toolkits.mplot3d import axes3d, Axes3D
 
 def import_energies(fname) :
 
-        data_set = []
 	data = []
-	counter = 0
-	separated_data = []
-	number_of_separate_particles = 394
-
-	data = np.loadtxt(fname)
-	temp_data_storage = []
-	for i in range(len(data)):
-		temp_data_storage.append(data[i])
-	 	if ((i+1) % number_of_separate_particles == 0 and i != 0) :
-			separated_data.append(temp_data_storage)
-			temp_data_storage = []
-	print(len(separated_data))
 	time = []
 	sum_total_energy = []
 	sum_potential_energy =[]
 	sum_kinetic_energy =[]
 	sum_coulomb_energy =[]
 	sum_momentum_energy=[]
-	sum_longitudinal_kinetic_energy = []
-	sum_transvers_kinetic_energy = []
-	sum_asym_energy = []
+	sum_asymmetry_energy = []
+	rho_mean_t = []
+	rho_mean_p = []
+	rms_mean_t = []
+	rms_mean_p = []
 
-	for i in range(len(separated_data)):
-		if(i != 0):
-#		  i = i*4
-		  time.append(i)
-		  sum_temp_total_energy=0
-		  sum_temp_potential_energy=0
-		  sum_temp_kinetic_energy=0
-		  sum_temp_coulomb_energy=0
-		  sum_temp_momentum_energy=0
-		  sum_temp_longitudinal_kinetic_energy = 0
-		  sum_temp_transvers_kinetic_energy = 0
-		  sum_temp_asym_energy = 0
+	data = np.loadtxt(fname)
+	print(len(data))
+	for i in range(len(data)):
+	  time.append(data[i][0])
+	  sum_total_energy.append(data[i][1])
+	  sum_potential_energy.append(data[i][2])
+	  sum_kinetic_energy.append(data[i][3])
+	  sum_coulomb_energy.append(data[i][4])
+	  sum_momentum_energy.append(data[i][5])
+	  sum_asymmetry_energy.append(data[i][6])
+	  rho_mean_t.append(data[i][7])
+	  rho_mean_p.append(data[i][8])
+	  rms_mean_t.append(data[i][9])
+	  rms_mean_p.append(data[i][10])
 
-		  for j in range(number_of_separate_particles):
-		  		 sum_temp_total_energy += separated_data[i][j][6]
-		  		 sum_temp_potential_energy += separated_data[i][j][7]
-		  		 sum_temp_kinetic_energy += separated_data[i][j][8]
-		  		 sum_temp_coulomb_energy += separated_data[i][j][9]
-		  		 sum_temp_momentum_energy += separated_data[i][j][10]
-		  		 sum_temp_longitudinal_kinetic_energy += separated_data[i][j][11] 
-		  		 sum_temp_transvers_kinetic_energy  += separated_data[i][j][12]
-		  		 sum_temp_asym_energy += separated_data[i][j][13]
-		  sum_total_energy.append(sum_temp_total_energy/float(number_of_separate_particles))
-		  sum_potential_energy.append(sum_temp_potential_energy/float(number_of_separate_particles))
-		  sum_kinetic_energy.append(sum_temp_kinetic_energy/float(number_of_separate_particles))
-		  sum_coulomb_energy.append(sum_temp_coulomb_energy/float(number_of_separate_particles))
-		  sum_momentum_energy.append(sum_temp_momentum_energy/float(number_of_separate_particles))
-		  sum_longitudinal_kinetic_energy.append(sum_temp_longitudinal_kinetic_energy/ float(number_of_separate_particles)) 
-		  sum_transvers_kinetic_energy.append(sum_temp_transvers_kinetic_energy/float(number_of_separate_particles)) 
-		  sum_asym_energy.append(sum_temp_asym_energy/float(number_of_separate_particles))
 
-	return time,sum_total_energy,sum_potential_energy,sum_kinetic_energy,sum_coulomb_energy,sum_momentum_energy,sum_longitudinal_kinetic_energy,sum_transvers_kinetic_energy,sum_asym_energy
+	return time,sum_total_energy,sum_potential_energy,sum_kinetic_energy,sum_coulomb_energy,sum_momentum_energy,sum_asymmetry_energy,rho_mean_t,rho_mean_p,rms_mean_t,rms_mean_p
+#	return time,sum_total_energy,sum_potential_energy,sum_kinetic_energy,sum_coulomb_energy,sum_momentum_energy,sum_asymmetry_energy
+
 
 def import_energies_alt(fname) :
 
