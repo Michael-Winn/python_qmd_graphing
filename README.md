@@ -6,8 +6,8 @@ These functions and files are used to input the data created by the QMD part of 
 
 * [X] Add the ability to turn off and on the output of the plots to .png 
 
-* [ ] Look into the possibility of outputting directly to pdf
+* [X] Look into the possibility of outputting directly to pdf
 
 * [X] Give better names to saved outputs
 
-
+* [ ] Look into the possibility of making the plotting_functions more compact and modular
