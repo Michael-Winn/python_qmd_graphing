@@ -144,8 +144,8 @@ def upgraded_plotting_function(static,plot_static,momentum,plot_momentum,wtp):
       plt.savefig('output_graphs_python/constant/momentum/' + plot_static[0][4][i]+'.pdf')
     if(wtp==2) :  
       upgraded_plot_inner(i,static,plot_static)
+      plt.legend(["MOMENTUM","STATIC"],loc='upper center', bbox_to_anchor=(-2.55,2.45),ncol=1, fancybox=True, shadow=True)
       plt.savefig('output_graphs_python/constant/' + plot_static[0][4][i]+'.pdf')
-
   plt.show()
 
 def upgraded_plot_inner(i,values,info):
@@ -157,7 +157,7 @@ def upgraded_plot_inner(i,values,info):
     plt.xlabel('time step (fm)')
     plt.ylabel('energy (MeV)')
     
-    plt.legend(loc='upper center', bbox_to_anchor=(1, 1.25),ncol=3, fancybox=True, shadow=True)
+#    plt.legend(loc='upper center', bbox_to_anchor=(1, 1.25),ncol=3, fancybox=True, shadow=True)
     plt.subplot(2,3,2)
     plt.plot(values[i][0],values[i][2],label=info[0][0][1],color=info[0][1],linestyle=info[0][2],marker=info[0][3],markevery=10)
     plt.grid()

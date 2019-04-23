@@ -66,7 +66,7 @@ for i in range(number_of_files_to_import) :
 #######################################################################
 ####################################################################### CALL THE PLOTTING ROUTINES
 upgraded_plotting_function(static,plot_info_static,momentum,plot_info_momentum,wtp)
-upgraded_plotting_function_density(static,plot_info_density_static,momentum,plot_info_density_momentum,wtp)
+#upgraded_plotting_function_density(static,plot_info_density_static,momentum,plot_info_density_momentum,wtp)
 #plotting_function_rms(static,plot_info_rms_static,momentum,plot_info_rms_momentum)
 
 #plotting_momentum_contribution(static,plot_info_static,momentum,plot_info_old,plot_info_new)
