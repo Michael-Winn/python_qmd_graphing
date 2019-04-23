@@ -69,6 +69,7 @@ def graph_settings_static(number_of_graphs):
       g_name.append("kinetic")
       g_name.append("asymmetry")
       g_name.append("momentum")
+      g_name.append("momentum opt")
       v_name = []
       v_name.append("Total system energy MOMENTUM")
       v_name.append("Total system potential energy MOMENTUM")
@@ -92,6 +93,7 @@ def graph_settings_momentum(number_of_graphs):
       g_name.append("kinetic")
       g_name.append("asymmetry")
       g_name.append("momentum")
+      g_name.append("momentum opt")
       v_name = []
       v_name.append("Total system energy MOMENTUM")
       v_name.append("Total system potential energy MOMENTUM")
@@ -117,7 +119,13 @@ def graph_settings_density_static() :
       v_linestyle.append("-")
       v_linestyle.append("--")
       v_marker = ""
-      plot_info.append([v_name,v_color,v_linestyle,v_marker])
+      v_mfc = []
+      v_mfc.append('black')
+      v_mfc.append('black')
+      v_edge = []
+      v_edge.append('black')
+      v_edge.append('black')
+      plot_info.append([v_name,v_color,v_linestyle,v_marker,v_mfc,v_edge])
   return plot_info
 
 
@@ -128,9 +136,17 @@ def graph_settings_density_momentum() :
       v_name.append(r"$\rho_{p}$")
       v_name.append(r"$\rho_{t}$")
       v_color = "orange"
-      v_linestyle = ""
+      v_linestyle = []
+      v_linestyle.append("")
+      v_linestyle.append("")
       v_marker = "o"
-      plot_info.append([v_name,v_color,v_linestyle,v_marker])
+      v_mfc = []
+      v_mfc.append('orange')
+      v_mfc.append('none')
+      v_edge = []
+      v_edge.append('black')
+      v_edge.append('orange')
+      plot_info.append([v_name,v_color,v_linestyle,v_marker,v_mfc,v_edge])
   return plot_info
 
 

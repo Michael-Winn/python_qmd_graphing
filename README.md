@@ -10,4 +10,4 @@ These functions and files are used to input the data created by the QMD part of 
 
 * [X] Give better names to saved outputs
 
-* [ ] Look into the possibility of making the plotting_functions more compact and modular
+* [X] Look into the possibility of making the plotting_functions more compact and modular
