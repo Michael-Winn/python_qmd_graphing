@@ -163,6 +163,40 @@ def graph_settings_rms_momentum() :
 
 
 
+def graph_settings_momentum_comparing_old(number_of_graphs):
+  plot_info = []
+  for i in range(number_of_graphs) :
+      v_name = []
+      v_name.append("Total system energy MOMENTUM old potential")
+      v_name.append("Total system potential energy MOMENTUM")
+      v_name.append("Total system kinetic energy MOMENTUM")
+      v_name.append("Total system coulomb energy MOMENTUM")
+      v_name.append("Total system momentum energy MOMENTUM")
+      v_name.append("Total system asymmetry energy MOMENTUM")
+      v_color = "orange"
+      v_linestyle = ""
+      v_marker = "o"
+      plot_info.append([v_name,v_color,v_linestyle,v_marker])
+  return plot_info
+
+
+def graph_settings_momentum_comparing_new(number_of_graphs):
+  plot_info = []
+  for i in range(number_of_graphs) :
+      v_name = []
+      v_name.append("Total system energy MOMENTUM calc optical potential")
+      v_name.append("Total system potential energy MOMENTUM")
+      v_name.append("Total system kinetic energy MOMENTUM")
+      v_name.append("Total system coulomb energy MOMENTUM")
+      v_name.append("Total system momentum energy MOMENTUM")
+      v_name.append("Total system asymmetry energy MOMENTUM")
+      v_color = "red"
+      v_linestyle = "--"
+      v_marker = ""
+      plot_info.append([v_name,v_color,v_linestyle,v_marker])
+  return plot_info
+
+
 
 
 
