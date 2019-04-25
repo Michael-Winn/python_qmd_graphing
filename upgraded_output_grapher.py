@@ -18,13 +18,13 @@ from tools.output_methods import *
 
 ########################################################### COMMON VARIABLES
 current_working_dir = '../altered_version_v11'
-static_dir_nb = 1
+static_dir_nb = 3
 momentum_dir_nb = 2
-number_of_files_to_import =7
+number_of_files_to_import =1
 static = []
 momentum = []
 ############# STATIC [0]  OR MOMENTUM [1] OF BOTH [2]
-wtp = 2
+wtp =0
 ########################################################### PLOTTING LEGEND ARGUMENTS
 plot_info_static = []
 plot_info_momentum = []

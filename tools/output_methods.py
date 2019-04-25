@@ -1,7 +1,9 @@
 import numpy as np
+import sys
 import warnings
 warnings.filterwarnings("ignore",category=DeprecationWarning)
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import axes3d, Axes3D  
 #Made modules import
 from tools.function_with_time import *
 from tools.graph_names import *
@@ -135,10 +137,11 @@ def upgraded_plotting_function(static,plot_static,momentum,plot_momentum,wtp):
     print(len(static))
     plt.figure(i,figsize=(19.2,10.8), dpi=100)
     plt.suptitle('CONSTANT DT=0.2 B=20 NUM=1 250 mev ',fontsize=18,y=0.05)
+    plt.grid()
     if(wtp ==0 or wtp ==2):
       upgraded_plot_inner(i,static,plot_static)
       plt.savefig('output_graphs_python/constant/static/' + plot_static[0][4][i]+'.pdf')
-    plt.clf()
+#    plt.clf()
     if(wtp==1 or wtp ==2):
       upgraded_plot_inner(i,momentum,plot_momentum)
       plt.savefig('output_graphs_python/constant/momentum/' + plot_static[0][4][i]+'.pdf')
@@ -152,7 +155,6 @@ def upgraded_plot_inner(i,values,info):
     plt.figure(i)
     plt.subplot(2,3,1)
     plt.plot(values[i][0],values[i][1],label=info[0][0][0],color=info[0][1],linestyle=info[0][2],marker=info[0][3],markevery=10)
-    plt.grid()
     plt.title("Variation of the TOTAL energy ")
     plt.xlabel('time step (fm)')
     plt.ylabel('energy (MeV)')
@@ -252,3 +254,201 @@ def upgraded_density_inner(values,info):
   plt.ylabel(r'$\rho (fm^{-3})$')
   plt.title("Variation of the density for the ASYMMETRY energy ")
 
+def import_position(fname) :
+
+        data_set = []
+	data = []
+	counter = 0
+	separated_data = []
+	number_of_separate_particles = 394
+
+	data = np.loadtxt(fname)
+	temp_data_storage = []
+	for i in range(len(data)):
+		temp_data_storage.append(data[i])
+	 	if ((i+1) % number_of_separate_particles == 0 and i != 0) :
+			separated_data.append(temp_data_storage)
+			temp_data_storage = []
+	print(len(separated_data))
+	time = []
+	x = []
+	y = []
+	z = []
+	iso = []
+	for j in range(number_of_separate_particles):
+		  temp_time = []
+                  temp_x = []
+		  temp_y = []
+		  temp_z = []
+		  temp_iso = []
+		  for i in range(len(separated_data)):
+			  temp_time.append(separated_data[i][j][0])
+			  temp_x.append(separated_data[i][j][1])
+			  temp_y.append(separated_data[i][j][2])
+			  temp_z.append(separated_data[i][j][3])
+			  temp_iso.append(separated_data[i][j][4])
+
+		  time.append(temp_time)
+		  x.append(temp_x)
+		  y.append(temp_y)
+		  z.append(temp_z)
+		  iso.append(temp_iso)
+
+	return time,x,y,z,iso
+
+def plotting_position(time,x,y,z,iso,rms_stuff):
+  for j in range(len(time[0])):
+#    print(j)
+    progress(j,len(time[0]),'Generating PNGs')
+#  for j in range(2):
+#    print(j)
+    fig = plt.figure(j)
+    ax = Axes3D(fig)
+    nnuc = 394.
+    x0t_n = []
+    y0t_n = []
+    z0t_n = []
+    x0t_p = []
+    y0t_p = []
+    z0t_p = []
+    x0p_n = []
+    y0p_n = []
+    z0p_n = []
+    x0p_p = []
+    y0p_p = []
+    z0p_p = []
+    xm_t = 0. 
+    ym_t = 0. 
+    zm_t = 0. 
+    xm_p = 0. 
+    ym_p = 0. 
+    zm_p = 0. 
+    rms_t = 0.
+    rms_p = 0.
+    for i in range(len(time)):
+     if(i <= 196):
+       if(iso[i][j] ==0) :
+        x0t_n.append(x[i][j])
+        y0t_n.append(y[i][j])
+        z0t_n.append(z[i][j])
+       else:
+        x0t_p.append(x[i][j])
+        y0t_p.append(y[i][j])
+        z0t_p.append(z[i][j])
+     if(i>196) :
+       if(iso[i][j] ==0) :
+        x0p_n.append(x[i][j])
+        y0p_n.append(y[i][j])
+        z0p_n.append(z[i][j])
+       else : 
+        x0p_p.append(x[i][j])
+        y0p_p.append(y[i][j])
+        z0p_p.append(z[i][j])
+
+    for i in range(len(x0t_n)):
+      xm_t += x0t_n[i]
+      ym_t += y0t_n[i]
+      zm_t += z0t_n[i]
+
+    for i in range(len(x0t_p)):
+      xm_t += x0t_p[i]
+      ym_t += y0t_p[i]
+      zm_t += z0t_p[i]
+
+
+    for i in range(len(x0p_n)):
+      xm_p += x0p_n[i]
+      ym_p += y0p_n[i]
+      zm_p += z0p_n[i]
+
+    for i in range(len(x0p_p)):
+      xm_p += x0p_p[i]
+      ym_p += y0p_p[i]
+      zm_p += z0p_p[i]
+
+
+    xm_t /= nnuc*0.5
+    ym_t /= nnuc*0.5
+    zm_t /= nnuc*0.5
+    xm_p /= nnuc*0.5
+    ym_p /= nnuc*0.5
+    zm_p /= nnuc*0.5
+
+    for i in range(len(time)):
+      if(i <= 196):
+       rms_t +=(x[i][j]-xm_t)*(x[i][j]-xm_t)+(y[i][j]-ym_t)*(y[i][j]-ym_t)+(z[i][j]-zm_t)*(z[i][j]-zm_t)
+      if(i>196) :
+       rms_p +=(x[i][j]-xm_p)*(x[i][j]-xm_p)+(y[i][j]-ym_p)*(y[i][j]-ym_p)+(z[i][j]-zm_p)*(z[i][j]-zm_p)
+      
+    rms_t = 5./3.*np.sqrt(rms_t/nnuc)
+    rms_p = 5./3.*np.sqrt(rms_p/nnuc)
+#     print(rms_t,rms_t)
+#     print(rms_stuff[0][0][j],rms_stuff[0][1][j])
+#    print(xm_t,xm_p)
+#    print(rms_stuff[0][2][j],rms_stuff[0][5][j])
+
+#    print(sphere_on_center([rms_stuff[0][2][j],rms_stuff[0][3][j],rms_stuff[0][4][j]],rms_stuff[0][0][j]))
+    ax.plot_wireframe(*sphere_on_center([xm_t,ym_t,zm_t],rms_t), edgecolor="orange", alpha=0.2)
+#    ax.plot_wireframe(*sphere_on_center([rms_stuff[0][2][j],rms_stuff[0][3][j],rms_stuff[0][4][j]],(rms_stuff[0][0][j])), color="black", alpha=0.5)
+    target_n = ax.plot(x0t_n,y0t_n,z0t_n,color='red',label='Initial position of the target nuclei',marker='*',markersize=5,linestyle='',markeredgecolor='none',alpha='0.7')
+    target_p = ax.plot(x0t_p,y0t_p,z0t_p,color='orange',label='Initial position of the target nuclei',marker='o',markersize=5,linestyle='',markeredgecolor='none',alpha='0.7')
+    ax.plot_wireframe(*sphere_on_center([xm_p,ym_p,zm_p],rms_p), edgecolor="purple", alpha=0.2)
+#    ax.plot_wireframe(*sphere_on_center([rms_stuff[0][5][j],rms_stuff[0][6][j],rms_stuff[0][7][j]],rms_stuff[0][1][j]), color="red", alpha=0.5)
+    projectile_n = ax.plot(x0p_n,y0p_n,z0p_n,color='pink',label='Initial position of the target nuclei',marker='*',markersize=5,linestyle='',markeredgecolor='none',alpha='0.7')
+    projectile_p = ax.plot(x0p_p,y0p_p,z0p_p,color='purple',label='Initial position of the target nuclei',marker='o',markersize=5,linestyle='',markeredgecolor='none',alpha='0.7')
+
+    ax.legend((target_n,target_p,projectile_n,projectile_p),('Target Neutron','Target Proton','Projectile Neutron','Projectile Proton'),'upper left',ncol=1, fancybox=True, shadow=True)
+    ax.text(35,-1,-4,'T = ' +str(round(time[0][j],2)))
+    ax.view_init(14,78)
+    ax.set_xlim3d(-20,20)
+    ax.set_ylim3d(-20,20)
+    ax.set_zlim3d(-20,20)
+
+    plt.title('test')
+    plt.savefig('output_graphs_python/position/position'+str(j)+'.png')
+#    ax.set_title('T=' + str(round(time[0][j],2)))
+#    ax.set_title('123456')
+#    plt.show()
+
+def import_rms(fname) :
+
+	data = []
+	rms_mean_t = []
+	rms_mean_p = []
+	x_mean_t = []
+	y_mean_t = []
+	z_mean_t = []
+	x_mean_p = []
+	y_mean_p = []
+	z_mean_p = []
+
+	data = np.loadtxt(fname)
+	print(len(data))
+	for i in range(len(data)):
+	  rms_mean_t.append(data[i][0])
+	  rms_mean_p.append(data[i][1])
+	  x_mean_t.append(data[i][2])
+	  y_mean_t.append(data[i][3])
+	  z_mean_t.append(data[i][4])
+	  x_mean_p.append(data[i][5])
+	  y_mean_p.append(data[i][6])
+	  z_mean_p.append(data[i][7])
+
+	return rms_mean_t,rms_mean_p,x_mean_t,y_mean_t,z_mean_t,x_mean_p,y_mean_p,z_mean_p
+
+def sphere_on_center(centre,radius):
+         u, v = np.mgrid[0:2*np.pi:10*1j, 0:np.pi:10*1j]
+         sphere_x = centre[0] + radius * np.cos(u) * np.sin(v)
+	 sphere_y = centre[1] + radius * np.sin(u) * np.sin(v)
+	 sphere_z = centre[2] + radius * np.cos(v)
+	 return sphere_x, sphere_y, sphere_z
+
+
+def progress(count, total, status=''):
+      bar_len = 60
+      filled_len = int(round(bar_len * count / float(total)))
+      percents = round(100.0 * count / float(total), 1)
+      bar = '#' * filled_len + '-' * (bar_len - filled_len)
+
+      sys.stdout.write('[%s] %s%s %s\r' % (bar, percents, '%', status))
+      sys.stdout.flush()
