@@ -70,6 +70,7 @@ def graph_settings_static(number_of_graphs):
       g_name.append("asymmetry")
       g_name.append("momentum")
       g_name.append("momentum opt")
+      g_name.append("extra_square1")
       v_name = []
       v_name.append("Total system energy MOMENTUM")
       v_name.append("Total system potential energy MOMENTUM")
@@ -94,6 +95,7 @@ def graph_settings_momentum(number_of_graphs):
       g_name.append("asymmetry")
       g_name.append("momentum")
       g_name.append("momentum opt")
+      g_name.append("extra_square1")
       v_name = []
       v_name.append("Total system energy MOMENTUM")
       v_name.append("Total system potential energy MOMENTUM")

@@ -2,7 +2,16 @@ import numpy as np
 import sys
 import warnings
 warnings.filterwarnings("ignore",category=DeprecationWarning)
+import matplotlib.animation as animation
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+
+#import matplotlib as mpl
+print mpl.__version__
+#mpl.use('agg')
+#import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d, Axes3D  
 #Made modules import
 from tools.function_with_time import *
@@ -83,52 +92,53 @@ def plotting_function_rms(static,plot_static,momentum,plot_momentum):
 
 def plotting_momentum_contribution(static,plot_static,momentum,plot_old,plot_new):
     plt.figure(1,figsize=(19.2,10.8), dpi=100)
-    plt.suptitle('CONSTANT DT=0.2 B=20 NUM=1 250 mev ',fontsize=18,y=0.05)
+    plt.suptitle('CONSTANT DT=0.2 B=20 NUM=5 100 mev ',fontsize=18,y=0.05)
     plt.subplot(2,2,1)
-    plt.plot(momentum[1][0],momentum[1][1],label=plot_old[0][0][0],color=plot_old[0][1],linestyle=plot_old[0][2],marker=plot_old[0][3],markevery=10)
-    plt.plot(momentum[2][0],momentum[2][1],label=plot_new[0][0][0],color=plot_new[0][1],linestyle=plot_new[0][2],marker=plot_new[0][3],markevery=10)
+    plt.plot(momentum[5][0],momentum[5][1],label=plot_old[0][0][0],color=plot_old[0][1],linestyle=plot_old[0][2],marker=plot_old[0][3],markevery=10)
+    plt.plot(momentum[6][0],momentum[6][1],label=plot_new[0][0][0],color=plot_new[0][1],linestyle=plot_new[0][2],marker=plot_new[0][3],markevery=10)
     plt.grid()
     plt.title("Variation of the TOTAL energy ")
     plt.xlabel('time step (fm)')
     plt.ylabel('energy (MeV)')
     
     plt.subplot(2,2,2)
-    plt.plot(momentum[0][0],momentum[0][2],label=plot_old[0][0][1],color=plot_old[0][1],linestyle=plot_old[0][2],marker=plot_old[0][3],markevery=10)
-    plt.plot(momentum[3][0],momentum[3][2],label=plot_new[0][0][1],color=plot_new[0][1],linestyle=plot_new[0][2],marker=plot_new[0][3],markevery=10)
+    plt.plot(momentum[1][0],momentum[1][2],label=plot_old[0][0][1],color=plot_old[0][1],linestyle=plot_old[0][2],marker=plot_old[0][3],markevery=10)
+    plt.plot(momentum[7][0],momentum[7][2],label=plot_new[0][0][1],color=plot_new[0][1],linestyle=plot_new[0][2],marker=plot_new[0][3],markevery=10)
     plt.grid()
     plt.xlabel('time step (fm)')
     plt.ylabel('energy (MeV)')
     plt.title("Variation of the POTENTIAL energy ")
     
     plt.subplot(2,2,3)
-    plt.plot(momentum[1][0],momentum[1][5],label=plot_old[0][0][4],color=plot_old[0][1],linestyle=plot_old[0][2],marker=plot_old[0][3],markevery=10)
-    plt.plot(momentum[2][0],momentum[2][5],label=plot_new[0][0][4],color=plot_new[0][1],linestyle=plot_new[0][2],marker=plot_new[0][3],markevery=10)
+    plt.plot(momentum[5][0],momentum[5][5],label=plot_old[0][0][4],color=plot_old[0][1],linestyle=plot_old[0][2],marker=plot_old[0][3],markevery=10)
+    plt.plot(momentum[6][0],momentum[6][5],label=plot_new[0][0][4],color=plot_new[0][1],linestyle=plot_new[0][2],marker=plot_new[0][3],markevery=10)
     plt.grid()
     plt.xlabel('time step (fm)')
     plt.ylabel('energy (MeV)')
     plt.title("Variation of the MOMENTUM energy ")
     handles = [] 
     for i in range(len(momentum[1][5])):
-      momentum[1][5][i] = momentum[1][5][i] + momentum[0][2][i]
-      momentum[2][5][i] = momentum[2][5][i] + momentum[3][2][i]
+      momentum[5][5][i] = momentum[5][5][i] + momentum[1][2][i]
+      momentum[6][5][i] = momentum[6][5][i] + momentum[7][2][i]
     handles.append(0)
     handles.append(0)
     handles.append(0)
     plt.subplot(2,2,4)
     handles[0] = plt.plot(static[0][0],static[0][2],label=plot_static[0][0][2],color=plot_static[0][1],linestyle=plot_static[0][2],marker=plot_static[0][3],markevery=10)
-    handles[1] = plt.plot(momentum[1][0],momentum[1][5],label=plot_old[0][0][4],color=plot_old[0][1],linestyle=plot_old[0][2],marker=plot_old[0][3],markevery=10)
-    handles[2] = plt.plot(momentum[2][0],momentum[2][5],label=plot_new[0][0][4],color=plot_new[0][1],linestyle=plot_new[0][2],marker=plot_new[0][3],markevery=10)
+    handles[1] = plt.plot(momentum[5][0],momentum[5][5],label=plot_old[0][0][4],color=plot_old[0][1],linestyle=plot_old[0][2],marker=plot_old[0][3],markevery=10)
+    handles[2] = plt.plot(momentum[6][0],momentum[6][5],label=plot_new[0][0][4],color=plot_new[0][1],linestyle=plot_new[0][2],marker=plot_new[0][3],markevery=10)
     plt.grid()
     plt.xlabel('time step (fm)')
     plt.ylabel('energy (MeV)')
     plt.title("Variation of the MOMENTUM+POTENTIAL STATIC energy ")
     
-    plt.legend(["POTENTIAL STATIC","POTENTIAL MOMENTUM OLD","POTENTIAL MOMENTUM OPTICAL"],loc='upper center', bbox_to_anchor=(-1, 2.65),ncol=1, fancybox=True, shadow=True)
+    plt.legend(["POTENTIAL STATIC","POTENTIAL MOMENTUM OLD","POTENTIAL MOMENTUM OPTICAL"],loc='upper center', bbox_to_anchor=(-1, 2.5),ncol=1, fancybox=True, shadow=True)
+    plt.savefig('output_graphs_python/constant/momentum_contribution.pdf')
 #    plt.legend(handles[0],handles[1],handles[2],["POTENTIAL MOMENTUM OLD","POTENTIAL MOMENTUM OPTICAL","POTENTIAL STATIC"],loc='upper center', bbox_to_anchor=(-0.2, 2.6),ncol=1, fancybox=True, shadow=True)
 #    plt.legend(handles,loc='upper center', bbox_to_anchor=(0, 2.6),ncol=1, fancybox=True, shadow=True)
 #
     plt.subplots_adjust(top=0.8)
-    plt.show()
+#    plt.show()
 
 
 def upgraded_plotting_function(static,plot_static,momentum,plot_momentum,wtp):
@@ -296,15 +306,17 @@ def import_position(fname) :
 
 	return time,x,y,z,iso
 
-def plotting_position(time,x,y,z,iso,rms_stuff):
+def plotting_position(time,x,y,z,iso,static):
+  rms_p_table= []
+  rms_t_table= []
   for j in range(len(time[0])):
-#    print(j)
     progress(j,len(time[0]),'Generating PNGs')
-#  for j in range(2):
+#  for j in range(3):
 #    print(j)
-    fig = plt.figure(j)
-    ax = Axes3D(fig)
     nnuc = 394.
+    time_rho = []
+    rho_t = []
+    rho_p = []
     x0t_n = []
     y0t_n = []
     z0t_n = []
@@ -382,33 +394,80 @@ def plotting_position(time,x,y,z,iso,rms_stuff):
       
     rms_t = 5./3.*np.sqrt(rms_t/nnuc)
     rms_p = 5./3.*np.sqrt(rms_p/nnuc)
-#     print(rms_t,rms_t)
-#     print(rms_stuff[0][0][j],rms_stuff[0][1][j])
-#    print(xm_t,xm_p)
-#    print(rms_stuff[0][2][j],rms_stuff[0][5][j])
+    if(j != 0) : rms_t_table.append(rms_t)
+    if(j != 0) :rms_p_table.append(rms_p)
 
-#    print(sphere_on_center([rms_stuff[0][2][j],rms_stuff[0][3][j],rms_stuff[0][4][j]],rms_stuff[0][0][j]))
-    ax.plot_wireframe(*sphere_on_center([xm_t,ym_t,zm_t],rms_t), edgecolor="orange", alpha=0.2)
-#    ax.plot_wireframe(*sphere_on_center([rms_stuff[0][2][j],rms_stuff[0][3][j],rms_stuff[0][4][j]],(rms_stuff[0][0][j])), color="black", alpha=0.5)
-    target_n = ax.plot(x0t_n,y0t_n,z0t_n,color='red',label='Initial position of the target nuclei',marker='*',markersize=5,linestyle='',markeredgecolor='none',alpha='0.7')
-    target_p = ax.plot(x0t_p,y0t_p,z0t_p,color='orange',label='Initial position of the target nuclei',marker='o',markersize=5,linestyle='',markeredgecolor='none',alpha='0.7')
-    ax.plot_wireframe(*sphere_on_center([xm_p,ym_p,zm_p],rms_p), edgecolor="purple", alpha=0.2)
-#    ax.plot_wireframe(*sphere_on_center([rms_stuff[0][5][j],rms_stuff[0][6][j],rms_stuff[0][7][j]],rms_stuff[0][1][j]), color="red", alpha=0.5)
-    projectile_n = ax.plot(x0p_n,y0p_n,z0p_n,color='pink',label='Initial position of the target nuclei',marker='*',markersize=5,linestyle='',markeredgecolor='none',alpha='0.7')
-    projectile_p = ax.plot(x0p_p,y0p_p,z0p_p,color='purple',label='Initial position of the target nuclei',marker='o',markersize=5,linestyle='',markeredgecolor='none',alpha='0.7')
 
-    ax.legend((target_n,target_p,projectile_n,projectile_p),('Target Neutron','Target Proton','Projectile Neutron','Projectile Proton'),'upper left',ncol=1, fancybox=True, shadow=True)
-    ax.text(35,-1,-4,'T = ' +str(round(time[0][j],2)))
+    for i in range(j):
+      time_rho.append(static[0][0][i])
+      rho_t.append(static[0][7][i])
+      rho_p.append(static[0][8][i])
+#    print('-----------')
+#    print(time_rho)
+#    print(rms_t_table)
+    fig = plt.figure(j,figsize=(10.8,7.2), dpi=100)
+    gridspec.GridSpec(2,2)
+
+    ax = plt.subplot2grid((5,5),(0,0), rowspan=5,colspan=4,projection='3d')
+    sphere_t = ax.plot_wireframe(*sphere_on_center([xm_t,ym_t,zm_t],rms_t), edgecolor="orange", alpha=0.2,linewidth=2)
+    target_n = ax.plot(x0t_n,y0t_n,z0t_n,color='red',linestyle='',marker='*',markersize=5,markeredgecolor='none',alpha=0.7,label='Target Neutron')
+    target_p = ax.plot(x0t_p,y0t_p,z0t_p,color='orange',linestyle='',marker='o',markersize=5,markeredgecolor='none',alpha=0.7,label='Target Proton')
+    sphere_p = ax.plot_wireframe(*sphere_on_center([xm_p,ym_p,zm_p],rms_p), edgecolor="purple", alpha=0.2)
+    projectile_n = ax.plot(x0p_n,y0p_n,z0p_n,color='magenta',linestyle='',marker='*',markersize=5,markeredgecolor='none',alpha=0.7,label='Projectile Neutron')
+    projectile_p = ax.plot(x0p_p,y0p_p,z0p_p,color='purple',linestyle='',marker='o',markersize=5,markeredgecolor='none',alpha=0.7,label='Projectile Proton')
+    ax.legend(loc='upper left')
     ax.view_init(14,78)
-    ax.set_xlim3d(-20,20)
-    ax.set_ylim3d(-20,20)
-    ax.set_zlim3d(-20,20)
+    ax.set_xlim3d(-30,30)
+    ax.set_ylim3d(-30,30)
+    ax.set_zlim3d(-30,30)
 
-    plt.title('test')
-    plt.savefig('output_graphs_python/position/position'+str(j)+'.png')
-#    ax.set_title('T=' + str(round(time[0][j],2)))
-#    ax.set_title('123456')
+    ax2 = plt.subplot2grid((5,5),(0,4)) 
+    ax2.set_title('Target density')
+    ax2.set_xlabel('time step (fm)')
+    ax2.set_ylabel(r'$\rho (fm^{-3})$')
+    ax2.set_xlim(0,120)
+    ax2.set_ylim(0.08,0.2)
+    ax2.grid()
+    ax2.legend()
+    plot_rho_t = ax2.plot(time_rho,rho_p,color='orange')
+
+    ax3 = plt.subplot2grid((5,5),(3,4)) 
+    ax3.set_title('Target density')
+    ax3.set_xlabel('time step (fm)')
+    ax3.set_ylabel(r'$\rho (fm^{-3})$')
+    ax3.set_xlim(0,120)
+    ax3.set_ylim(0.08,0.2)
+    ax3.grid()
+    ax3.legend()
+    plot_rho_p = ax3.plot(time_rho,rho_p,color ='purple')
+
+    ax4 = plt.subplot2grid((5,5),(1,4)) 
+    ax4.set_title('Target rms')
+    ax4.set_xlabel('time step (fm)')
+    ax4.set_ylabel(r'$rms (fm)$')
+    ax4.set_xlim(0,120)
+    ax4.set_ylim(6,14)
+    ax4.grid()
+    ax4.legend()
+    plot_rms_t = ax4.plot(time_rho,rms_t_table,color='orange')
+
+
+    ax5 = plt.subplot2grid((5,5),(2,4)) 
+    ax5.set_title('Projectile rms')
+    ax5.set_xlabel('time step (fm)')
+    ax5.set_ylabel(r'$rms (fm)$')
+    ax5.set_xlim(0,120)
+    ax5.set_ylim(6,14)
+    ax5.grid()
+    ax5.legend()
+    plot_rms_p = ax5.plot(time_rho,rms_p_table,color='purple')
+
+    fig.suptitle('T= '+  str(round(time[0][j],2)))
+#    if(j %10 ==0) : plt.savefig('output_graphs_python/position/position00'+str(j)+'.png')
+    plt.close()
 #    plt.show()
+
+
 
 def import_rms(fname) :
 

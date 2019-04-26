@@ -1,7 +1,7 @@
 import numpy as np
 import warnings
 warnings.filterwarnings("ignore",category=DeprecationWarning)
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 #Made modules import
 from tools.function_with_time import *
 from tools.graph_names import *
@@ -18,13 +18,13 @@ from tools.output_methods import *
 
 ########################################################### COMMON VARIABLES
 current_working_dir = '../altered_version_v11'
-static_dir_nb = 3
+static_dir_nb = 1
 momentum_dir_nb = 2
-number_of_files_to_import =1
+number_of_files_to_import =8
 static = []
 momentum = []
 ############# STATIC [0]  OR MOMENTUM [1] OF BOTH [2]
-wtp =0
+wtp =2
 ########################################################### PLOTTING LEGEND ARGUMENTS
 plot_info_static = []
 plot_info_momentum = []
