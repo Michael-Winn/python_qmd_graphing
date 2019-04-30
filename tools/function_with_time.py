@@ -154,4 +154,22 @@ def import_binding(fname) :
 	return time,sum_total_energy,sum_potential_energy,sum_kinetic_energy,sum_coulomb_energy,sum_momentum_energy,sum_asymmetry_energy,rho_mean_t,rho_mean_p,rms_mean_t,rms_mean_p
 #	return time,sum_total_energy,sum_potential_energy,sum_kinetic_energy,sum_coulomb_energy,sum_momentum_energy,sum_asymmetry_energy
 
+def import_rho_r(fname) :
+
+	data = []
+	rho_t = []
+	rho_p = []
+	r = []
+	count_t = []
+	count_p = []
+	data = np.loadtxt(fname)
+	print(len(data))
+	for i in range(len(data)):
+	    r.append(data[i][0])
+	    count_t.append(data[i][1])
+	    count_p.append(data[i][2])
+	    rho_t.append(data[i][3])
+	    rho_p.append(data[i][4])
+
+	return r,count_t,count_p,rho_t,rho_p
 

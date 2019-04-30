@@ -1,11 +1,12 @@
 import numpy as np
+#import pylab as pl
 import warnings
 warnings.filterwarnings("ignore",category=DeprecationWarning)
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 #Made modules import
 from tools.function_with_time import *
-
-
+from tools.graph_names import *
+from tools.output_methods import *
 ############################################################KEY
 
 #time = the timestep of the for of lenght the energy [0]
@@ -16,78 +17,87 @@ from tools.function_with_time import *
 #tme = total momentum energy [5]
 #tae = total system asymetry energy [6]
 
+########################################################### COMMON VARIABLES
+current_working_dir = '../altered_version_v11'
+static_dir_nb = 6
+momentum_dir_nb = 7
+number_of_files_to_import =1
+number_of_sal = 11
+static = []
+momentum = []
+values_t_0 = []
+values_t_30 = []
+############# STATIC [0]  OR MOMENTUM [1] OF BOTH [2]
+wtp =1
+########################################################### PLOTTING LEGEND ARGUMENTS
+plot_info_static = []
+plot_info_momentum = []
+plot_info_density_static = []
+plot_info_density_momentum = []
+plot_info_rms_static = []
+plot_info_rms_momentum = []
+plot_info_old = []
+plot_info_new = []
 
+plot_info_static = graph_settings_static(number_of_files_to_import*number_of_files_to_import)
+plot_info_momentum = graph_settings_momentum(number_of_files_to_import*number_of_files_to_import)
+plot_info_density_static = graph_settings_density_static()
+plot_info_density_momentum = graph_settings_density_momentum()
+plot_info_rms_static = graph_settings_rms_static()
+plot_info_rms_momentum = graph_settings_rms_momentum()
 
-############################################################ INPUT FILES
-wptp = 3
-data_density = []
-data_rms = []
+plot_info_old = graph_settings_momentum_comparing_old(number_of_files_to_import)
+plot_info_new = graph_settings_momentum_comparing_new(number_of_files_to_import)
+###########################################################  IMPORTS
+if(wtp==0) : print('WTP = {0}, so only static values will be plotted'.format(wtp))
+if(wtp==1) : print('WTP = {0}, so only momentum values will be plotted'.format(wtp))
+if(wtp==2) : print('WTP = {0}, momentum and static values will be plotted'.format(wtp))
+for i in range(number_of_files_to_import) :
+  for k in range(50,71):
+     j = float(k)/10.
 #STATIC IMPORT
-if(wptp ==1 or wptp == 3 ) :
-  radius,rho_p,rho_t,rho_f,timest,rho_pa,rho_ta,rho_fa = import_density('../xxx1/fort.661')
-  data_density.append([radius,rho_p,rho_t,rho_f,timest,rho_pa,rho_ta,rho_fa])
-  timest,rms_p,rms_t,rms_f = import_rms('../xxx1/fort.662')
-  data_rms.append([timest,rms_p,rms_t,rms_f])
+     if(wtp ==0 or wtp ==2) :
+         if(k==50) : print('STATIC import files they number : {0}'.format(number_of_files_to_import))
+         static_dir = current_working_dir + '/xxx'+str(static_dir_nb)+'/xxx'+str(static_dir_nb)+'-'+str(i)+'/xxx'+str(static_dir_nb)+'-'+str(i)+'-'+str(j)+'/prop_out_'+str(i)+'.dat'
+         time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p = import_energies(static_dir)
+     	 static.append([time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p])
 #MOMENTUM IMPORT
-if(wptp ==1 or wptp == 3 ) :
-  radius,rho_p,rho_t,rho_f,timest,rho_pa,rho_ta,rho_fa = import_density('../xxx2/fort.661')
-  data_density.append([radius,rho_p,rho_t,rho_f,timest,rho_pa,rho_ta,rho_fa])
-  timest,rms_p,rms_t,rms_f = import_rms('../xxx2/fort.662')
-  data_rms.append([timest,rms_p,rms_t,rms_f])
-############################################################ PLOTS 
-############################## FIGURE 1 
-plt.figure(1)
-plt.suptitle('For the static dependence')
-plt.subplot(2,1,1)
-print(len(data_rms[0][0]))
-print(len(data_density[0][5]))
-plt.plot(data_rms[0][0],data_density[0][5],label=r'$\bar{\rho}_{projectile}(t)$',linestyle='-',marker='o',markevery = 10)
-plt.plot(data_rms[0][0],data_density[0][6],label=r'$\bar{\rho}_{target}(t)$',linestyle='-',marker='o',markevery = 10)
-plt.plot(data_rms[0][0],data_density[0][7],label=r'$\bar{\rho}_{fireball}(t)$',linestyle='-',marker='o',markevery = 10)
-#plt.plot(data_density[0][0][0],data_density[0][1][0],label=r'$\bar{\rho}_{projectile}(t)$ for time step ' + str(data_density[0][4][0][0])+ 'fm',linestyle='-',marker='o',markevery = 10)
-#plt.plot(data_density[0][0][50],data_density[0][2][0],label=r'$\bar{\rho}_{target}(t)$ for time step ' + str(data_density[0][4][0][0])+' fm',linestyle='-',marker='v',markevery = 10)
-#plt.plot(data_density[0][0][80],data_density[0][3][0],label=r'$\bar{\rho}_{fireball}(t)$ for time step ' + str(data_density[0][4][0][0])+' fm',linestyle='-',marker='+',markevery = 10)
-plt.grid()
-plt.legend()
-plt.xlabel(r'time step $(fm/c)$')
-plt.ylabel(r' average density $\bar{\rho}$')
-plt.title("Variation density in function of the radius for a specific time step ")
-plt.subplot(2,1,2)
-plt.plot(data_rms[0][0],data_rms[0][1],label=r'$rms_{projectile}$',linestyle = '-',marker = 'o',markevery=10)
-plt.plot(data_rms[0][0],data_rms[0][2],label=r'$rms_{target}$',linestyle = '-',marker = 'v',markevery=10)
-plt.plot(data_rms[0][0],data_rms[0][3],label=r'$rms_{fireball}$',linestyle = '-',marker = '+',markevery=10)
-plt.grid()
-plt.legend()
-plt.xlabel(r'time step $(fm/c)$')
-plt.ylabel(r'rms')
-plt.title("Variation of the rms in  function of the timestep")
+#for i in range(number_of_files_to_import) :
+#  for k in range(53,70):
+#    j = float(k)/10.
+#    if(wtp ==1 or wtp ==2) :
+#        if(k==50) : print('MOMENTUM import files they number : {0}'.format(number_of_files_to_import))
+##	momentum_dir = current_working_dir + '/xxx'+str(momentum_dir_nb)+'/xxx'+str(momentum_dir_nb)+'-'+str(i)+'/xxx'+str(momentum_dir_nb)+'-'+str(i)+'-'+str(j)+'/prop_out_'+str(i)+'.dat'
+##    	time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p = import_energies(momentum_dir)
+##    	momentum.append([time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p])
+#	r,rho_t,rho_p = import_rho_r(current_working_dir + '/xxx'+str(momentum_dir_nb)+'/xxx'+str(momentum_dir_nb)+'-'+str(i)+'/xxx'+str(momentum_dir_nb)+'-'+str(i)+'-'+str(j)+'/time_02.dat')
+#	values_t_0.append([r,rho_t,rho_p])
+#	r,rho_t,rho_p = import_rho_r(current_working_dir + '/xxx'+str(momentum_dir_nb)+'/xxx'+str(momentum_dir_nb)+'-'+str(i)+'/xxx'+str(momentum_dir_nb)+'-'+str(i)+'-'+str(j)+'/time_30.dat')
+#	values_t_30.append([r,rho_t,rho_p])
+#######################################################################
+####################################################################### CALL THE PLOTTING ROUTINES
+#upgraded_plotting_function(static,plot_info_static,momentum,plot_info_momentum,wtp)
+#upgraded_plotting_function_density(static,plot_info_density_static,momentum,plot_info_density_momentum,wtp)
+#plotting_function_rms(static,plot_info_rms_static,momentum,plot_info_rms_momentum)
+
+#plotting_momentum_contribution(static,plot_info_static,momentum,plot_info_old,plot_info_new)
 
 
-############################## FIGURE 2 
-plt.figure(2)
-plt.suptitle('For the momentum dependence')
-plt.subplot(2,1,1)
-plt.plot(data_rms[1][0],data_density[1][5],label=r'$\bar{\rho}_{projectile}(t)$',linestyle='-',marker='o',markevery = 10)
-plt.plot(data_rms[1][0],data_density[1][6],label=r'$\bar{\rho}_{target}(t)$',linestyle='-',marker='o',markevery = 10)
-plt.plot(data_rms[1][0],data_density[1][7],label=r'$\bar{\rho}_{fireball}(t)$',linestyle='-',marker='o',markevery = 10)
-#plt.plot(data_density[1][0][0],data_density[1][1][0],label=r'$\bar{\rho}_{projectile}(t)$ for time step ' + str(data_density[1][4][0][0])+ 'fm',linestyle='-',marker='o',markevery = 10)
-#plt.plot(data_density[1][0][50],data_density[1][2][0],label=r'$\bar{\rho}_{target}(t)$ for time step ' + str(data_density[1][4][0][0])+' fm',linestyle='-',marker='v',markevery = 10)
-#plt.plot(data_density[1][0][80],data_density[1][3][0],label=r'$\bar{\rho}_{fireball}(t)$ for time step ' + str(data_density[1][4][0][0])+' fm',linestyle='-',marker='+',markevery = 10)
-plt.grid()
-plt.legend()
-plt.xlabel(r'time step $(fm/c)$')
-plt.ylabel(r'density $\rho$')
-plt.title("Variation density in function of the radius for a specific time step ")
-plt.subplot(2,1,2)
-plt.plot(data_rms[1][0],data_rms[1][1],label=r'$rms_{projectile}$',linestyle = '-',marker = 'o',markevery=10)
-plt.plot(data_rms[1][0],data_rms[1][2],label=r'$rms_{target}$',linestyle = '-',marker = 'v',markevery=10)
-plt.plot(data_rms[1][0],data_rms[1][3],label=r'$rms_{fireball}$',linestyle = '-',marker = '+',markevery=10)
-plt.grid()
-plt.legend()
-plt.xlabel(r'time step $(fm/c)$')
-plt.ylabel(r'rms')
-plt.title("Variation of the rms in  function of the timestep")
+#plotting_density_function(static,momentum)
+
+r,count_t,count_p,rho_t,rho_p = import_rho_r(current_working_dir + '/xxx'+str(momentum_dir_nb)+'/xxx'+str(momentum_dir_nb)+'-'+str(0)+'/xxx'+str(momentum_dir_nb)+'-'+str(0)+'-5.0/time_00.dat')
+values_t_0.append([r,count_t,count_p,rho_t,rho_p])
+print(values_t_0[0][1])
+#plotting_density_r(values_t_0)
+
+
+r,count_t,count_p,rho_t,rho_p = import_rho_r(current_working_dir + '/xxx'+str(momentum_dir_nb)+'/xxx'+str(momentum_dir_nb)+'-'+str(0)+'/xxx'+str(momentum_dir_nb)+'-'+str(0)+'-5.0/time_30.dat')
+values_t_30.append([r,count_t,count_p,rho_t,rho_p])
+print(values_t_30[0][1])
+#plotting_density_r(values_t_30)
+plotting_density_r(values_t_0,values_t_30)
 
 
 
-plt.show()
+
+

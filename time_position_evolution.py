@@ -22,7 +22,7 @@ from tools.output_methods import *
 
 ########################################################### COMMON VARIABLES
 current_working_dir = '../altered_version_v11'
-static_dir_nb = 4
+static_dir_nb = 3
 position_static = []
 rms_stuff = []
 static = []
