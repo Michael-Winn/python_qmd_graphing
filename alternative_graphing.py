@@ -1,3 +1,6 @@
+import plotly.offline
+from plotly import tools
+import plotly.graph_objs as go 
 import numpy as np
 import warnings
 warnings.filterwarnings("ignore",category=DeprecationWarning)
@@ -63,19 +66,109 @@ for i in range(number_of_files_to_import) :
     	time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p = import_energies(momentum_dir)
     	momentum.append([time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p])
 
-#######################################################################
-####################################################################### CALL THE PLOTTING ROUTINES
-#upgraded_plotting_function(static,plot_info_static,momentum,plot_info_momentum,wtp)
-#upgraded_plotting_function_density(static,plot_info_density_static,momentum,plot_info_density_momentum,wtp)
-#plotting_function_rms(static,plot_info_rms_static,momentum,plot_info_rms_momentum)
 
-#plotting_momentum_contribution(static,plot_info_static,momentum,plot_info_old,plot_info_new)
+tse_s = go.Scatter(
+    x = static[0][0],
+    y = static[0][1],
+    name = 'Static',
+    line = dict(color = ('rgb(148,103,189)')))
+
+tsp_s = go.Scatter(
+    x = static[0][0],
+    y = static[0][2],
+    showlegend=False,
+    line = dict(color = ('rgb(148,103,189)')))
+
+tsk_s = go.Scatter(
+    x = static[0][0],
+    y = static[0][3],
+    showlegend=False,
+    line = dict(color = ('rgb(148,103,189)')))
+
+tsc_s = go.Scatter(
+    x = static[0][0],
+    y = static[0][4],
+    showlegend=False,
+    line = dict(color = ('rgb(148,103,189)')))
+
+tsm_s = go.Scatter(
+    x = static[0][0],
+    y = static[0][5],
+    showlegend=False,
+    line = dict(color = ('rgb(148,103,189)')))
+
+tsa_s = go.Scatter(
+    x = static[0][0],
+    y = static[0][6],
+    showlegend=False,
+    line = dict(color = ('rgb(148,103,189)')))
+
+tse_m = go.Scatter(
+    x = momentum[0][0],
+    y = momentum[0][1],
+    name = 'Momentum',
+    mode = 'markers',
+    line = dict(color = ('rgb(255,193,86)')))
+
+tsp_m = go.Scatter(
+    x = momentum[0][0],
+    y = momentum[0][2],
+    showlegend=False,
+    mode = 'markers',
+    line = dict(color = ('rgb(255,193,86)')))
+
+tsk_m = go.Scatter(
+    x = momentum[0][0],
+    y = momentum[0][3],
+    showlegend=False,
+    mode = 'markers',
+    line = dict(color = ('rgb(255,193,86)')))
+
+tsc_m = go.Scatter(
+    x = momentum[0][0],
+    y = momentum[0][4],
+    showlegend=False,
+    mode = 'markers',
+    line = dict(color = ('rgb(255,193,86)')))
+
+tsm_m = go.Scatter(
+    x = momentum[0][0],
+    y = momentum[0][5],
+    showlegend=False,
+    mode = 'markers',
+    line = dict(color = ('rgb(255,193,86)')))
+
+tsa_m = go.Scatter(
+    x = momentum[0][0],
+    y = momentum[0][6],
+    showlegend=False,
+    mode = 'markers',
+    line = dict(color = ('rgb(255,193,86)')))
 
 
 
+fig = tools.make_subplots(rows =2, cols = 3,subplot_titles=('Variation of total energy',
+							    'Variation of Potential energy',
+							    'Variation of Kinetic energy',
+							    'Variation of Coulomb energy',
+							    'Variation of momentum energy',
+							    'Variation of asymmetry energy'))
 
-upgraded_plotting_function_density_all_only(static,plot_info_density_static,momentum,plot_info_density_momentum,wtp)
+fig.append_trace(tse_s,1,1)
+fig.append_trace(tsp_s,1,2)
+fig.append_trace(tsk_s,1,3)
+fig.append_trace(tsc_s,2,1)
+fig.append_trace(tsm_s,2,2)
+fig.append_trace(tsa_s,2,3)
 
 
+fig.append_trace(tse_m,1,1)
+fig.append_trace(tsp_m,1,2)
+fig.append_trace(tsk_m,1,3)
+fig.append_trace(tsc_m,2,1)
+fig.append_trace(tsm_m,2,2)
+fig.append_trace(tsa_m,2,3)
 
-
+fig['layout'].update(title='Energy variations for static calculation')
+#plotly.io.write_image(fig, 'fig1.pdf')
+plotly.offline.plot(fig,filename='static_energy_plot.html')

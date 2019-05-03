@@ -1,14 +1,11 @@
 import numpy as np
 import warnings
 warnings.filterwarnings("ignore",category=DeprecationWarning)
-
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
-#import matplotlib.pyplot as plt
 #Made modules import
-from tools.function_with_time import *
-from tools.graph_names import *
+from tools.import_methods import *
 from tools.output_methods import *
 ############################################################KEY
 
@@ -21,7 +18,7 @@ from tools.output_methods import *
 #tae = total system asymetry energy [6]
 
 ########################################################### COMMON VARIABLES
-current_working_dir = '../altered_version_v11'
+current_working_dir = '../../altered_version_v11'
 static_dir_nb = 1
 position_static = []
 rms_stuff = []
@@ -41,6 +38,7 @@ for i in range(1) :
 #    rms_stuff.append([rmsp,rmst,xmt,ymt,zmt,xmp,ymp,zmp])
 
 print(len(time))
+print(len(time[0]))
 print(len(x))
 print(len(y))
 print(len(z))

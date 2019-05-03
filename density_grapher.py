@@ -19,8 +19,8 @@ from tools.output_methods import *
 
 ########################################################### COMMON VARIABLES
 current_working_dir = '../altered_version_v11'
-static_dir_nb = 6
-momentum_dir_nb = 7
+static_dir_nb = 1
+momentum_dir_nb = 2
 number_of_files_to_import =1
 number_of_sal = 11
 static = []
@@ -53,14 +53,30 @@ if(wtp==0) : print('WTP = {0}, so only static values will be plotted'.format(wtp
 if(wtp==1) : print('WTP = {0}, so only momentum values will be plotted'.format(wtp))
 if(wtp==2) : print('WTP = {0}, momentum and static values will be plotted'.format(wtp))
 for i in range(number_of_files_to_import) :
-  for k in range(50,71):
-     j = float(k)/10.
+  for j in np.arange(4.00,7.25,0.25):
+     j_str = "%0.2f" % j
+     print(j_str)
+#     j = float(k)/10.
 #STATIC IMPORT
-     if(wtp ==0 or wtp ==2) :
-         if(k==50) : print('STATIC import files they number : {0}'.format(number_of_files_to_import))
-         static_dir = current_working_dir + '/xxx'+str(static_dir_nb)+'/xxx'+str(static_dir_nb)+'-'+str(i)+'/xxx'+str(static_dir_nb)+'-'+str(i)+'-'+str(j)+'/prop_out_'+str(i)+'.dat'
+     if(wtp ==1) :
+#         if(k==50) : print('STATIC import files they number : {0}'.format(number_of_files_to_import))
+         if(j==4.0) : print('STATIC import files they number : {0}'.format(number_of_files_to_import))
+         static_dir = current_working_dir + '/xxx'+str(static_dir_nb)+'/xxx'+str(static_dir_nb)+'-'+str(i)+'/xxx'+str(static_dir_nb)+'-'+str(i)+'-'+j_str+'/prop_out_'+str(i)+'.dat'
          time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p = import_energies(static_dir)
      	 static.append([time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p])
+
+for i in range(number_of_files_to_import) :
+  for j in np.arange(4.00,7.25,0.25):
+     print(j)
+     j_str = "%0.2f" % j
+#     j = float(k)/10.
+#MOMENTUM IMPORT
+     if(wtp ==1) :
+#         if(k==50) : print('STATIC import files they number : {0}'.format(number_of_files_to_import))
+         if(j==4.0) : print('momentum import files they number : {0}'.format(number_of_files_to_import))
+         momentum_dir = current_working_dir + '/xxx'+str(momentum_dir_nb)+'/xxx'+str(momentum_dir_nb)+'-'+str(i)+'/xxx'+str(momentum_dir_nb)+'-'+str(i)+'-'+j_str+'/prop_out_'+str(i)+'.dat'
+         time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p = import_energies(momentum_dir)
+     	 momentum.append([time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p])
 #MOMENTUM IMPORT
 #for i in range(number_of_files_to_import) :
 #  for k in range(53,70):
@@ -85,17 +101,18 @@ for i in range(number_of_files_to_import) :
 
 #plotting_density_function(static,momentum)
 
-r,count_t,count_p,rho_t,rho_p = import_rho_r(current_working_dir + '/xxx'+str(momentum_dir_nb)+'/xxx'+str(momentum_dir_nb)+'-'+str(0)+'/xxx'+str(momentum_dir_nb)+'-'+str(0)+'-5.0/time_00.dat')
-values_t_0.append([r,count_t,count_p,rho_t,rho_p])
-print(values_t_0[0][1])
-#plotting_density_r(values_t_0)
-
-
-r,count_t,count_p,rho_t,rho_p = import_rho_r(current_working_dir + '/xxx'+str(momentum_dir_nb)+'/xxx'+str(momentum_dir_nb)+'-'+str(0)+'/xxx'+str(momentum_dir_nb)+'-'+str(0)+'-5.0/time_30.dat')
-values_t_30.append([r,count_t,count_p,rho_t,rho_p])
-print(values_t_30[0][1])
-#plotting_density_r(values_t_30)
-plotting_density_r(values_t_0,values_t_30)
+other_plotting_function_density_all_only(static,plot_info_density_static,momentum,plot_info_density_momentum,wtp)
+#r,count_t,count_p,rho_t,rho_p = import_rho_r(current_working_dir + '/xxx'+str(momentum_dir_nb)+'/xxx'+str(momentum_dir_nb)+'-'+str(0)+'/xxx'+str(momentum_dir_nb)+'-'+str(0)+'-5.0/time_00.dat')
+#values_t_0.append([r,count_t,count_p,rho_t,rho_p])
+#print(values_t_0[0][1])
+##plotting_density_r(values_t_0)
+#
+#
+#r,count_t,count_p,rho_t,rho_p = import_rho_r(current_working_dir + '/xxx'+str(momentum_dir_nb)+'/xxx'+str(momentum_dir_nb)+'-'+str(0)+'/xxx'+str(momentum_dir_nb)+'-'+str(0)+'-5.0/time_30.dat')
+#values_t_30.append([r,count_t,count_p,rho_t,rho_p])
+#print(values_t_30[0][1])
+##plotting_density_r(values_t_30)
+#plotting_density_r(values_t_0,values_t_30)
 
 
 

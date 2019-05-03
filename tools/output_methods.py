@@ -151,7 +151,7 @@ def upgraded_plotting_function(static,plot_static,momentum,plot_momentum,wtp):
     if(wtp ==0 or wtp ==2):
       upgraded_plot_inner(i,static,plot_static)
       plt.savefig('output_graphs_python/constant/static/' + plot_static[0][4][i]+'.pdf')
-#    plt.clf()
+      plt.clf()
     if(wtp==1 or wtp ==2):
       upgraded_plot_inner(i,momentum,plot_momentum)
       plt.savefig('output_graphs_python/constant/momentum/' + plot_static[0][4][i]+'.pdf')
@@ -309,10 +309,10 @@ def import_position(fname) :
 def plotting_position(time,x,y,z,iso,static):
   rms_p_table= []
   rms_t_table= []
-  for j in range(len(time[0])):
-    progress(j,len(time[0]),'Generating PNGs')
-#  for j in range(3):
-#    print(j)
+#  for j in range(len(time[0])):
+#    progress(j,len(time[0]),'Generating PNGs')
+  for j in range(1):
+    print(j)
     nnuc = 394.
     time_rho = []
     rho_t = []
@@ -389,9 +389,14 @@ def plotting_position(time,x,y,z,iso,static):
     for i in range(len(time)):
       if(i <= 196):
        rms_t +=(x[i][j]-xm_t)*(x[i][j]-xm_t)+(y[i][j]-ym_t)*(y[i][j]-ym_t)+(z[i][j]-zm_t)*(z[i][j]-zm_t)
+       print(rms_t,x[i][j],
+	   (x[i][j]-xm_t)**2,
+	   (y[i][j]-ym_t)**2,
+	   (z[i][j]-zm_t)**2)
       if(i>196) :
        rms_p +=(x[i][j]-xm_p)*(x[i][j]-xm_p)+(y[i][j]-ym_p)*(y[i][j]-ym_p)+(z[i][j]-zm_p)*(z[i][j]-zm_p)
       
+    print('RMS before division {0}'.format(rms_t)) 
     rms_t = 5./3.*np.sqrt(rms_t/nnuc)
     rms_p = 5./3.*np.sqrt(rms_p/nnuc)
     if(j != 0) : rms_t_table.append(rms_t)
@@ -412,6 +417,8 @@ def plotting_position(time,x,y,z,iso,static):
 
 #    ax = plt.subplot2grid((5,5),(0,0), rowspan=5,colspan=4,projection='3d')
     ax = fig.add_subplot(gs[:,:-1],projection='3d')
+    print('Center targert {0} {1} {2}'.format(xm_t,ym_t,zm_t))
+    print('RMS_t {0}'.format(rms_t))
     sphere_t = ax.plot_wireframe(*sphere_on_center([xm_t,ym_t,zm_t],rms_t), edgecolor="orange", alpha=0.2,linewidth=2)
     target_n = ax.plot(x0t_n,y0t_n,z0t_n,color='red',linestyle='',marker='*',markersize=5,markeredgecolor='none',alpha=0.7,label='Target Neutron')
     target_p = ax.plot(x0t_p,y0t_p,z0t_p,color='orange',linestyle='',marker='o',markersize=5,markeredgecolor='none',alpha=0.7,label='Target Proton')
@@ -477,7 +484,8 @@ def plotting_position(time,x,y,z,iso,static):
 
     fig.suptitle('T= '+  str(round(time[0][j],2)))
 #    plt.savefig('output_graphs_python/position/position00'+str(j)+'.png')
-    if(j %10 ==0) : plt.savefig('output_graphs_python/position/position00'+str(j)+'.png')
+#    if(j %10 ==0) : plt.savefig('output_graphs_python/position/position00'+str(j)+'.png')
+    plt.savefig('output_graphs_python/position/position00'+str(j)+'.png')
     plt.close()
 #    plt.show()
 
@@ -721,4 +729,65 @@ def plotting_density_r(values_0,*values_1):
        ax2.set_title("TIME 30 " + "\n" + "SAL = 5.0 " +r' $\Sigma_t = $' + str(sum_t_0) + r' $\Sigma_p = $ '+str(sum_p_0) + r' $\bar{\rho}=$ ' +str(round(sum_d,2)))
        if(i==0): ax2.legend(loc='upper right')
     plt.savefig('output_graphs_python/density_sal.png')
+
+
+
+def upgraded_plotting_function_density_all_only(static,plot_static,momentum,plot_momentum,wtp):
+###########################################RHOM
+  plt.figure(figsize=(19.2,10.8), dpi=100)
+  plt.suptitle('CONSTANT DT=0.2 B=20 NUM=5 100 MeV RHOM METHOD ',fontsize=18,y=0.05)
+  if(wtp==0 or wtp ==2) : upgraded_density_inner_all(static,plot_static)
+  if(wtp==1 or wtp ==2) : upgraded_density_inner_all(momentum,plot_momentum)
+  plt.savefig('output_graphs_python/density/density.pdf')
+#  plt.show()
+
+def upgraded_density_inner_all(values,info):
+  plt.plot(values[0][0],values[0][7],label=info[0][0][0],color=info[0][1],markeredgecolor=info[0][5][0],linestyle=info[0][2][0],marker=info[0][3],markevery=10,mfc=info[0][4][0])
+  plt.plot(values[0][0],values[0][8],label=info[0][0][1],color=info[0][1],markeredgecolor=info[0][5][1],linestyle=info[0][2][1],marker=info[0][3],markevery=10,mfc=info[0][4][1])
+  plt.grid()
+  plt.title("Variation of the density for the TOTAL energy ")
+  plt.xlabel('time step (fm)')
+  plt.ylabel(r'$\rho (fm^{-3})$')
+  
+  plt.legend(loc='upper center')
+
+
+def other_plotting_function_density_all_only(static,plot_static,momentum,plot_momentum,wtp):
+###########################################RHOM
+  print('gets here')
+  print(len(momentum))
+  fig = plt.figure(figsize=(19.2,10.8), dpi=100)
+  plt.suptitle('CONSTANT DT=0.2 B=20 NUM=5 100 MeV RHOM METHOD ',fontsize=18,y=0.05)
+  other_density_inner_all(fig,static,plot_static,momentum,plot_momentum)
+#  plt.show()
+
+def other_density_inner_all(fig,static,plot_static,momentum,plot_momentum):
+  sal_values = []
+  for i in np.arange(4.0,7.25,0.25) :
+    sal_values.append(i)
+  cols = 4
+  gs = gridspec.GridSpec(4,4,hspace=0.5)
+  for j in range(2) : 
+    if(j ==0) :
+      values = static
+      info = plot_static
+
+    if(j ==1) :
+      values = momentum
+      info = plot_momentum
+
+    for i in range(len(values)):
+        row = (i // cols)
+        col = i % cols
+        ax = fig.add_subplot(gs[row,col]) 
+        ax.grid()
+        ax.plot(values[i][0],values[i][7],label=info[0][0][0],color=info[0][1],markeredgecolor=info[0][5][0],linestyle=info[0][2][0],marker=info[0][3],markevery=10,mfc=info[0][4][0])
+        ax.plot(values[i][0],values[i][8],label=info[0][0][1],color=info[0][1],markeredgecolor=info[0][5][1],linestyle=info[0][2][1],marker=info[0][3],markevery=10,mfc=info[0][4][1])
+        ax.grid()
+        ax.set_title(r"$\rho(t)$  $E_{tot}$  $SAL = $ "+str(sal_values[i]))
+        ax.set_xlabel('time step (fm)')
+        ax.set_ylabel(r'$\rho (fm^{-3})$')
+        ax.legend(loc='upper center')
+#        ax.set_ylim(0.07,0.22)
+  plt.savefig('output_graphs_python/density/density_sal_momentum.pdf')
 
