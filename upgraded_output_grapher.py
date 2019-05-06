@@ -18,13 +18,13 @@ from tools.output_methods import *
 
 ########################################################### COMMON VARIABLES
 current_working_dir = '../altered_version_v11'
-static_dir_nb = 1
-momentum_dir_nb = 2
+static_dir_nb = 10
+momentum_dir_nb = 11
 number_of_files_to_import =1
 static = []
 momentum = []
 ############# STATIC [0]  OR MOMENTUM [1] OF BOTH [2]
-wtp =2
+wtp =1
 ########################################################### PLOTTING LEGEND ARGUMENTS
 plot_info_static = []
 plot_info_momentum = []
@@ -52,20 +52,20 @@ for i in range(number_of_files_to_import) :
 #STATIC IMPORT
     if(wtp ==0 or wtp ==2) :
         if(i==0) : print('STATIC import files they number : {0}'.format(number_of_files_to_import))
-	static_dir = current_working_dir + '/xxx'+str(static_dir_nb)+'/xxx'+str(static_dir_nb)+'-'+str(i)+'/xxx1-'+str(i)+'-5.25/prop_out_'+str(i)+'.dat'
+	static_dir = current_working_dir + '/xxx'+str(static_dir_nb)+'/xxx'+str(static_dir_nb)+'-'+str(i)+'/xxx'+str(static_dir_nb)+'-'+str(i)+'-5.25/prop_out_'+str(i)+'.dat'
     	time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p = import_energies(static_dir)
     	static.append([time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p])
 #MOMENTUM IMPORT
 for i in range(number_of_files_to_import) :
     if(wtp ==1 or wtp ==2) :
         if(i==0) : print('MOMENTUM import files they number : {0}'.format(number_of_files_to_import))
-	momentum_dir = current_working_dir + '/xxx'+str(momentum_dir_nb)+'/xxx'+str(momentum_dir_nb)+'-'+str(i)+'/xxx2-'+str(i)+'-5.25/prop_out_'+str(i)+'.dat'
+	momentum_dir = current_working_dir + '/xxx'+str(momentum_dir_nb)+'/xxx'+str(momentum_dir_nb)+'-'+str(i)+'/xxx'+str(momentum_dir_nb)+'-'+str(i)+'-5.00/prop_out_'+str(i)+'.dat'
     	time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p = import_energies(momentum_dir)
     	momentum.append([time,tse,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p])
 
 #######################################################################
 ####################################################################### CALL THE PLOTTING ROUTINES
-#upgraded_plotting_function(static,plot_info_static,momentum,plot_info_momentum,wtp)
+upgraded_plotting_function(static,plot_info_static,momentum,plot_info_momentum,wtp)
 #upgraded_plotting_function_density(static,plot_info_density_static,momentum,plot_info_density_momentum,wtp)
 #plotting_function_rms(static,plot_info_rms_static,momentum,plot_info_rms_momentum)
 
@@ -74,7 +74,7 @@ for i in range(number_of_files_to_import) :
 
 
 
-upgraded_plotting_function_density_all_only(static,plot_info_density_static,momentum,plot_info_density_momentum,wtp)
+#upgraded_plotting_function_density_all_only(static,plot_info_density_static,momentum,plot_info_density_momentum,wtp)
 
 
 

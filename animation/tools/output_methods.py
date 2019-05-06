@@ -1,175 +1,146 @@
 import numpy as np
-
 import sys
 import warnings
 warnings.filterwarnings("ignore",category=DeprecationWarning)
 import matplotlib.animation as animation
 import matplotlib as mpl
 mpl.use('Agg')
+print mpl.__version__
+from tqdm import tqdm
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-
-#import matplotlib as mpl
-print mpl.__version__
-#mpl.use('agg')
-#import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import axes3d, Axes3D  
-#Made modules import
+from mpl_toolkits.mplot3d import axes3d, Axes3D
 from tools.import_methods import *
-
+from tools.nuclei import *
 nnuc = 394.
 def plotting_position(time,x,y,z,iso,static):
   rms_p_table= []
   rms_t_table= []
+  rotation_addition = 40
 #  for j in range(len(time)):
-  for j in range(1):
-    print(j)
+  for j in tqdm(range(len(time)),desc='Generating PNGs'):
+#  for j in range(20):
+#    print(j)
 #    progress(j,len(time),'Generating PNGs')
-    position = np.zeros(len(time[j]), dtype=[('x',float,1),
-                                             ('y',float,1),
-                                             ('z',float,1),
-					     ('iso',float,1)])
-
-#    position =  np.dtype([('x',float,len(time[j])),
-#                       ('y',float,len(time[j])),
-#                       ('z',float,len(time[j])),
-#	               ('iso',float,len(time[j]))])
-
-#    print(position)
-#    print(len(position))
-#    print(len(time[j]))
-    for i in range(len(time[j])):
-      position['x'][i] = x[j][i]
-      position['y'][i] = y[j][i]
-      position['z'][i] = z[j][i]
-      position['iso'][i] = iso[j][i]
-#    print(position)
-#    print(len(position))
-
-    particles = np.dtype([('x',float,len(time[j])),
-		       ('y',float,len(time[j])),
-		       ('z',float,len(time[j]))])
-
-
-#    particles = np.dtype([('x',float,(len(time[j]),1)),
-#			    ('y',float,(len(time[j]),1)),
-#			    ('z',float,(len(time[j]),1))])
-
-
-    single_particle = np.dtype([('x',float,1),
-		                ('y',float,1),
-		                ('z',float,1)])
-                                   
-    center = np.zeros(1,dtype = [('target',single_particle),
-                                 ('projectile',single_particle)])
                                   
-    target = np.zeros(1,dtype = [('neutron',particles),
-        		         ('proton',particles)])
-
-    projectile = np.zeros(1,dtype = [('neutron',particles),
-		                     ('proton',particles)])
-
-#    center = np.dtype([('target',single_particle),
-#	               ('projectile',single_particle)])
-#                                  
-#    target = np.dtype([('neutron',particles),
-#		       ('proton',particles)])
-#
-#    projectile = np.dtype([('neutron',particles),
-#		        ('proton',particles)])
 
     time_rho = []
     rho_t = []
     rho_p = []
-
-    PNTP_seperation(time,position,target,projectile)
-    rms_t,rms_p =calculate_rms(time,center,position) 
-    if(j != 0) : rms_t_table.append(rms_t)
-    if(j != 0) :rms_p_table.append(rms_p)
+    target = nuclei() 
+    projectile = nuclei()
+    attribution(j,x,y,z,iso,target,projectile)
+    target.calc_center()
+    target.calc_rms()
+    projectile.calc_center()
+    projectile.calc_rms()
+    if(j != 0) : rms_t_table.append(target.rms)
+    if(j != 0) :rms_p_table.append(projectile.rms)
 
     for i in range(j):
       time_rho.append(static[0][0][i])
       rho_t.append(static[0][7][i])
       rho_p.append(static[0][8][i])
-#    print('TARGET NEUTRON X LEN : ')
-#    print(target['neutron']['x'][0][0])
-#    print(len(target['neutron']['x'][0]))
-#    print(len(target['neutron']['y'][0]))
-#    print(target['neutron']['z'][0][0])
+
+    if(j %10 ==0) : 
 ########################################PLOTTING PART
-    fig = plt.figure(j,figsize=(10.8,7.2), dpi=100)
-    gs = gridspec.GridSpec(5,5,hspace=1)
-    gs_target = gridspec.GridSpec(5,5,hspace=0)
-    gs_projectile = gridspec.GridSpec(5,5,hspace=0)
+      fig = plt.figure(j,figsize=(10.8,7.2), dpi=100)
+      gs = gridspec.GridSpec(5,5,hspace=1)
+      gs_target = gridspec.GridSpec(5,5,hspace=0)
+      gs_projectile = gridspec.GridSpec(5,5,hspace=0)
 
-    ax = fig.add_subplot(gs[:,:-1],projection='3d')
-    sphere_t = ax.plot_wireframe(*sphere_on_center([center['target']['x'],
-						    center['target']['y'],
-						    center['target']['z']],rms_t), edgecolor="orange", alpha=0.2,linewidth=2)
-#    print(target['neutron']['x'][0])
-    target_n = ax.plot(target['neutron']['x'][0],
-		       target['neutron']['y'][0],
-		       target['neutron']['z'][0],color='red',linestyle='',marker='*',markersize=5,markeredgecolor='none',alpha=0.7,label='Target Neutron')
-    target_p = ax.plot(target['proton']['x'][0],
-		       target['proton']['y'][0],
-		       target['proton']['z'][0],color='orange',linestyle='',marker='o',markersize=5,markeredgecolor='none',alpha=0.7,label='Target Proton')
-    sphere_p = ax.plot_wireframe(*sphere_on_center([center['projectile']['x'],
-						    center['projectile']['y'],
-						    center['projectile']['z']],rms_p), edgecolor="purple", alpha=0.2)
-    projectile_n = ax.plot(projectile['neutron']['x'][0],
-			   projectile['neutron']['y'][0],
-			   projectile['neutron']['z'][0],color='magenta',linestyle='',marker='*',markersize=5,markeredgecolor='none',alpha=0.7,label='Projectile Neutron')
-    projectile_p = ax.plot(projectile['proton']['x'][0],
-			   projectile['proton']['y'][0],
-			   projectile['proton']['z'][0],color='purple',linestyle='',marker='o',markersize=5,markeredgecolor='none',alpha=0.7,label='Projectile Proton')
-    ax.legend(loc='upper left')
-    ax.view_init(14,78)
-    ax.set_xlim3d(-30,30)
-    ax.set_ylim3d(-30,30)
-    ax.set_zlim3d(-30,30)
+      ax = fig.add_subplot(gs[:,:-1],projection='3d')
+      if (time[j][0] <= 41):
+        sphere_t = ax.plot_wireframe(*sphere_on_center([target.xc,
+          					      target.yc,
+          					      target.zc],target.rms), edgecolor="orange", alpha=0.2,linewidth=2)
+      else:
+        alpha_value = 0.2/(float(time[j][0]-40.)*0.4)
+        if(alpha_value < 0.05): alpha_value = 0.0
+        sphere_t = ax.plot_wireframe(*sphere_on_center([target.xc,
+          					      target.yc,
+          					      target.zc],target.rms), edgecolor="orange", alpha=alpha_value,linewidth=2)
+      target_n = ax.plot(target.neutrons.x,
+          	       target.neutrons.y,
+          	       target.neutrons.z,color='red',linestyle='',marker='*',markersize=5,markeredgecolor='none',alpha=0.7,label='Target Neutron')
+      target_p = ax.plot(target.protons.x,
+          	       target.protons.y,
+          	       target.protons.z,color='orange',linestyle='',marker='o',markersize=5,markeredgecolor='none',alpha=0.7,label='Target Proton')
 
+      if (time[j][0] <= 41):
+        sphere_p = ax.plot_wireframe(*sphere_on_center([projectile.xc,
+          					      projectile.yc,
+          					      projectile.zc],projectile.rms), edgecolor="purple", alpha=0.2)
+      else:
+        sphere_p = ax.plot_wireframe(*sphere_on_center([projectile.xc,
+          					      projectile.yc,
+          					      projectile.zc],projectile.rms), edgecolor="purple", alpha=alpha_value)
+      projectile_n = ax.plot(projectile.neutrons.x,
+          		   projectile.neutrons.y,
+          		   projectile.neutrons.z,color='magenta',linestyle='',marker='*',markersize=5,markeredgecolor='none',alpha=0.7,label='Projectile Neutron')
+      projectile_p = ax.plot(projectile.protons.x,
+          		   projectile.protons.y,
+          		   projectile.protons.z,color='purple',linestyle='',marker='o',markersize=5,markeredgecolor='none',alpha=0.7,label='Projectile Proton')
 
-    ax2 = fig.add_subplot(gs_target[0,4]) 
-    ax2.set_ylabel(r'$\rho (fm^{-3})$')
-    ax2.set_xlim(0,120)
-    ax2.set_ylim(0.08,0.2)
-    ax2.grid()
-    plt.tick_params(axis='x',bottom=False,labelbottom=False) 
-    plot_rho_t = ax2.plot(time_rho,rho_p,color='orange',label='Target')
-    ax2.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize=7)
+      ax.legend(loc='upper left')
+      ax.view_init(14,78)
+      ax.set_xlim3d(-30,30)
+      ax.set_ylim3d(-30,30)
+      ax.set_zlim3d(-30,30)
 
-
-    ax5 = fig.add_subplot(gs_target[1,4]) 
-    ax5.set_xlabel('time step (fm)')
-    ax5.set_ylabel(r'$rms (fm)$')
-    ax5.set_xlim(0,120)
-    ax5.set_ylim(6,14)
-    ax5.grid()
-    plt.tick_params(axis='x',bottom=False,labelbottom=False) 
-    plot_rms_t = ax5.plot(time_rho,rms_t_table,color='orange')
-
-    ax3 = fig.add_subplot(gs_projectile[2,4]) 
-    ax3.set_ylabel(r'$\rho (fm^{-3})$')
-    ax3.set_xlim(0,120)
-    ax3.set_ylim(0.08,0.2)
-    ax3.grid()
-    plt.tick_params(axis='x',bottom=False,labelbottom=False) 
-    plot_rho_p = ax3.plot(time_rho,rho_p,color ='purple',label='Projectile')
-    ax3.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize=7)
+      end_time = 160
+      ax2 = fig.add_subplot(gs_target[0,4]) 
+      ax2.set_ylabel(r'$\rho (fm^{-3})$')
+      ax2.set_xlim(0,end_time)
+      ax2.set_yscale('log')
+      ax2.grid()
+      plt.tick_params(axis='x',bottom=False,labelbottom=False) 
+      plot_rho_t = ax2.plot(time_rho,rho_p,color='orange',label='Target')
+      ax2.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize=7)
 
 
-    plt.tick_params(axis='x',bottom=True,labelbottom=False) 
-    ax4 = fig.add_subplot(gs_projectile[3,4]) 
-    ax4.set_xlabel('time step (fm)')
-    ax4.set_ylabel(r'$rms (fm)$')
-    ax4.set_xlim(0,120)
-    ax4.set_ylim(6,14)
-    ax4.grid()
-    plot_rms_p = ax4.plot(time_rho,rms_p_table,color='purple',label='Projectile')
+      ax5 = fig.add_subplot(gs_target[1,4]) 
+      ax5.set_xlabel('time step (fm)')
+      ax5.set_ylabel(r'$rms (fm)$')
+      ax5.set_xlim(0,end_time)
+      ax5.set_yscale('log')
+      ax5.grid()
+      plt.tick_params(axis='x',bottom=False,labelbottom=False) 
+      plot_rms_t = ax5.plot(time_rho,rms_t_table,color='orange')
 
-    fig.suptitle('T= '+  str(round(time[j][0],2)))
-    if(j %10 ==0) : plt.savefig('output_graphs_python/position/position00'+str(j)+'.png')
-    plt.close()
+      ax3 = fig.add_subplot(gs_projectile[2,4]) 
+      ax3.set_ylabel(r'$\rho (fm^{-3})$')
+      ax3.set_xlim(0,end_time)
+      ax3.set_yscale('log')
+      ax3.grid()
+      plt.tick_params(axis='x',bottom=False,labelbottom=False) 
+      plot_rho_p = ax3.plot(time_rho,rho_p,color ='purple',label='Projectile')
+      ax3.legend(loc='center left', bbox_to_anchor=(1, 0.5),fontsize=7)
+
+
+      plt.tick_params(axis='x',bottom=True,labelbottom=False) 
+      ax4 = fig.add_subplot(gs_projectile[3,4]) 
+      ax4.set_xlabel('time step (fm)')
+      ax4.set_ylabel(r'$rms (fm)$')
+      ax4.set_xlim(0,end_time)
+      ax4.set_yscale('log')
+      ax4.grid()
+      plot_rms_p = ax4.plot(time_rho,rms_p_table,color='purple',label='Projectile')
+
+      fig.suptitle('T= '+  str(round(time[j][0],2)))
+      stop_time = 120
+      if(j <stop_time )  : plt.savefig('../animation_out/position/position00'+str(j)+'.png')
+      if( j == stop_time) :
+          for i in tqdm(range(5),desc='Dramatic Pause'):
+         	plt.savefig('../animation_out/position/position00'+str(j+i)+'.png')
+          for i in tqdm(range(10,rotation_addition),desc='Rotating PNGs'):
+          	ax.set_xlim3d(-30,30)
+      		ax.set_ylim3d(-30,30)
+      		ax.set_zlim3d(-30,30)
+                ax.view_init(14,78+12*i)
+                plt.savefig('../animation_out/position/position00'+str(j+i)+'.png')
+      if(j>stop_time) :  plt.savefig('../animation_out/position/position00'+str(j+rotation_addition)+'.png')
+      plt.close()
 
 
 
@@ -193,91 +164,23 @@ def progress(count, total, status=''):
 
 
 
-def calculate_center(time,position,center):
-      for i in range(int(nnuc)):
-	if(i <= 196):
-#	  if(i==0) :print(position['x'][i])
-	  center['target']['x'] += position['x'][i]
-	  center['target']['y'] += position['y'][i]
-	  center['target']['z'] += position['z'][i]
-#	  print('xm {0} then xi {1}'.format(center['target']['x'],position['x'][i]))
-	else:
-	  center['projectile']['x'] += position['x'][i]
-	  center['projectile']['y'] += position['y'][i]
-	  center['projectile']['z'] += position['z'][i]
-
-      center['target']['x'] /=float(nnuc*0.5)
-      center['target']['y'] /=float(nnuc*0.5)
-      center['target']['z'] /=float(nnuc*0.5)
-
-      center['projectile']['x'] /=float(nnuc*0.5)
-      center['projectile']['y'] /=float(nnuc*0.5)
-      center['projectile']['z'] /=float(nnuc*0.5)
-
-def PNTP_seperation(time,position,target,projectile):
-    tn_counter = 0
-    tp_counter = 0
-    pn_counter = 0
-    pp_counter = 0
-    xt_n = []
-    yt_n = []
-    zt_n = []
-
-    xt_p = []
-    yt_p = []
-    zt_p = []
-    xp_n = []
-    yp_n = []
-    zp_n = []
-
-    xp_p = []
-    yp_p = []
-    zp_p = []
-    for i in range(int(nnuc)):
-	if(i <= 196) :
-	  if(position['iso'][i] == 0) :
-	    tn_counter += 1
-	    xt_n.append(position['x'][i])
-	    yt_n.append(position['y'][i])
-	    zt_n.append(position['z'][i])
-	  else :
-	    tp_counter +=1
-	    xt_p.append(position['x'][i])
-	    yt_p.append(position['y'][i])
-	    zt_p.append(position['z'][i])
-	else:
-	  if(position['iso'][i] ==0) :
-	    pn_counter +=1
-	    xp_n.append(position['x'][i])
-	    yp_n.append(position['y'][i])
-	    zp_n.append(position['z'][i])
-	  else:
-	    pp_counter +=1
-	    xp_p.append(position['x'][i])
-	    yp_p.append(position['y'][i])
-	    zp_p.append(position['z'][i])
-      
-    rt = [[xt_n,yt_n,zt_n],[xt_p,yt_p,zt_p]]
-    rp = [[xp_n,yp_n,zp_n],[xp_p,yp_p,zp_p]]
-    return rt,rp,tn_counter,tp_counter,pn_counter,pp_counter
-def calculate_rms(time,center,position):
-
-    calculate_center(time,position,center)
-#    print(center['target']['x'])
-#    print(center['target']['y'])
-#    print(center['target']['z'])
-    rms_t = 0.
-    rms_p = 0.
-    for i in range(int(nnuc)):
-      if(i <= 196):
-       rms_t += np.array((position['x'][i]-center['target']['x'])**2
-       +(position['y'][i]-center['target']['y'])**2
-       +(position['z'][i]-center['target']['z'])**2,dtype=float)
-      if(i>196) :
-       rms_p += np.array((position['x'][i]-center['projectile']['x'])**2
-       +(position['y'][i]-center['projectile']['y'])**2
-       +(position['z'][i]-center['projectile']['z'])**2,dtype=float)
-     
-    rms_t = 5./3.*np.sqrt(rms_t/nnuc)
-    rms_p = 5./3.*np.sqrt(rms_p/nnuc)
-    return rms_t,rms_p
+def attribution(j,x,y,z,iso,target,projectile):
+    for i in range(int(target.nucleons)):
+        if(i <= 196):
+            if(iso[j][i] == 0) :
+                target.neutrons.x.append(x[j][i]) 
+                target.neutrons.y.append(y[j][i]) 
+                target.neutrons.z.append(z[j][i]) 
+            else : 
+                target.protons.x.append(x[j][i]) 
+                target.protons.y.append(y[j][i]) 
+                target.protons.z.append(z[j][i]) 
+        else:
+            if(iso[j][i] == 0) :
+                projectile.neutrons.x.append(x[j][i]) 
+                projectile.neutrons.y.append(y[j][i]) 
+                projectile.neutrons.z.append(z[j][i]) 
+            else : 
+                projectile.protons.x.append(x[j][i]) 
+                projectile.protons.y.append(y[j][i]) 
+                projectile.protons.z.append(z[j][i]) 

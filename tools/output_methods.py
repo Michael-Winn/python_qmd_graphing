@@ -142,9 +142,9 @@ def plotting_momentum_contribution(static,plot_static,momentum,plot_old,plot_new
 
 
 def upgraded_plotting_function(static,plot_static,momentum,plot_momentum,wtp):
-  for i in range(len(static)):
+  for i in range(len(momentum)):
     print(i)
-    print(len(static))
+    print(len(momentum))
     plt.figure(i,figsize=(19.2,10.8), dpi=100)
     plt.suptitle('CONSTANT DT=0.2 B=20 NUM=1 250 mev ',fontsize=18,y=0.05)
     plt.grid()
@@ -154,7 +154,8 @@ def upgraded_plotting_function(static,plot_static,momentum,plot_momentum,wtp):
       plt.clf()
     if(wtp==1 or wtp ==2):
       upgraded_plot_inner(i,momentum,plot_momentum)
-      plt.savefig('output_graphs_python/constant/momentum/' + plot_static[0][4][i]+'.pdf')
+      print("here")
+      plt.savefig('output_graphs_python/constant/momentum/' + plot_momentum[0][4][i]+'.pdf')
     if(wtp==2) :  
       upgraded_plot_inner(i,static,plot_static)
       plt.legend(["MOMENTUM","STATIC"],loc='upper center', bbox_to_anchor=(-2.55,2.45),ncol=1, fancybox=True, shadow=True)
@@ -164,6 +165,7 @@ def upgraded_plotting_function(static,plot_static,momentum,plot_momentum,wtp):
 def upgraded_plot_inner(i,values,info):
     plt.figure(i)
     plt.subplot(2,3,1)
+    plt.grid()
     plt.plot(values[i][0],values[i][1],label=info[0][0][0],color=info[0][1],linestyle=info[0][2],marker=info[0][3],markevery=10)
     plt.title("Variation of the TOTAL energy ")
     plt.xlabel('time step (fm)')
