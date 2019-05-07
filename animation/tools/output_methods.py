@@ -16,7 +16,7 @@ nnuc = 394.
 def plotting_position(time,x,y,z,iso,static):
   rms_p_table= []
   rms_t_table= []
-  rotation_addition = 40
+  rotation_addition = 50
 #  for j in range(len(time)):
   for j in tqdm(range(len(time)),desc='Generating PNGs'):
 #  for j in range(20):
@@ -133,12 +133,18 @@ def plotting_position(time,x,y,z,iso,static):
       if( j == stop_time) :
           for i in tqdm(range(5),desc='Dramatic Pause'):
          	plt.savefig('../animation_out/position/position00'+str(j+i)+'.png')
+		ax_w_b = ax.w_zaxis.line.get_lw()
+		ax_tcks_b = ax.get_zticks()
           for i in tqdm(range(10,rotation_addition),desc='Rotating PNGs'):
+		ax.w_zaxis.line.set_lw(0.)
+		ax.set_zticks([])
           	ax.set_xlim3d(-30,30)
       		ax.set_ylim3d(-30,30)
       		ax.set_zlim3d(-30,30)
-                ax.view_init(14,78+12*i)
+                ax.view_init(14,78+9*i)
                 plt.savefig('../animation_out/position/position00'+str(j+i)+'.png')
+	  ax.w_zaxis.line.set_lw(ax_w_b)
+	  ax.set_zticks(ax_tcks_b)
       if(j>stop_time) :  plt.savefig('../animation_out/position/position00'+str(j+rotation_addition)+'.png')
       plt.close()
 

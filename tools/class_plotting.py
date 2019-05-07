@@ -14,20 +14,49 @@ from tools.nuclei import *
 
 
 def energy_plot(nucleus):
- fig = plt.figure(figsize=(10.8,7.2), dpi=100)                                                                                                                                              
- plt.suptitle(nucleus.sup_title) 
- gs = gridspec.GridSpec(2,3)          
+ fig = plt.figure(figsize=(19.2,10.8), dpi=100)                                                                                                                                              
+ plt.suptitle(nucleus[0].sup_title) 
+ gs = gridspec.GridSpec(2,3,hspace=0.4,wspace=0.3)          
  cols = 3
- 
- for i in range(len(nucleus.energies)):
-      row = (i // cols)
-      col = i % cols
-      ax = fig.add_subplot(gs[row,col]) 
-      ax.grid()
-      ax.set_xlabel(nucleus.time_label)
-      ax.set_ylabel(nucleus.energy_label)
-      ax.plot(nucleus.time,nucleus.energies[i],label = nucleus.plot_aspect.label ,
-					      color = nucleus.plot_aspect.color, 
-					      marker = nucleus.plot_aspect.marker, 
-					      linestyle = nucleus.plot_aspect.linestyle)
- plt.savefig('test.png')
+ for j in range(len(nucleus)): 
+  for i in range(len(nucleus[j].energies)):
+       row = (i // cols)
+       col = i % cols
+       ax = fig.add_subplot(gs[row,col]) 
+       ax.grid()
+       ax.set_title(nucleus[j].titles[i])
+       ax.set_xlabel(nucleus[j].time_label)
+       ax.set_ylabel(nucleus[j].energy_label)
+       ax.plot(nucleus[j].time,nucleus[j].energies[i],label = nucleus[j].plot_aspect.label ,
+         				      color = nucleus[j].plot_aspect.color, 
+         				      marker = nucleus[j].plot_aspect.marker, 
+         				      linestyle = nucleus[j].plot_aspect.linestyle,
+					      markevery = nucleus[j].plot_aspect.markevery)
+       if(i ==0) : ax.legend(loc='upper left',bbox_to_anchor=(-0.1,1.35))
+
+ plt.savefig('energy_test.png')
+
+
+def density_plot(nucleus):
+ fig = plt.figure(figsize=(19.2,10.8), dpi=100)
+ plt.suptitle(nucleus[0].sup_title) 
+ gs = gridspec.GridSpec(1,2)
+ cols = 2
+ for j in range(len(nucleus)):
+   row = (j // cols)
+   col = j % cols
+   ax = fig.add_subplot(gs[row,col]) 
+   ax.grid()
+   for i in range(len(nucleus[j].densities)):
+     ax.set_ylabel(nucleus[j].density_label)
+     ax.set_xlabel(nucleus[j].time_label)
+     ax.plot(nucleus[j].time,nucleus[j].densities[i],label = nucleus[j].plot_aspect.dlabel[i] ,
+           				      color = nucleus[j].plot_aspect.dcolor[i], 
+           				      marker = nucleus[j].plot_aspect.dmarker[i], 
+           				      linestyle = nucleus[j].plot_aspect.dlinestyle[i],
+  					      markevery = nucleus[j].plot_aspect.dmarkevery[i],
+					      mfc = nucleus[j].plot_aspect.dmfc[i],
+					      markeredgecolor=nucleus[j].plot_aspect.dmarkeredgecolor[i])
+  
+     ax.legend(loc='upper left',bbox_to_anchor=(-0.1,1.1))
+ plt.savefig('density_test.png')
