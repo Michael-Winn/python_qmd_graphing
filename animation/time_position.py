@@ -19,11 +19,11 @@ from tools.output_methods import *
 
 ########################################################### COMMON VARIABLES
 current_working_dir = '../../altered_version_v11'
-static_dir_nb = 11
+static_dir_nb = 100
 position_static = []
 rms_stuff = []
 static = []
-sal_val = 5.00
+sal_val = 5.25
 sal_val_str = "%0.2f" % sal_val
 
 ########################################################### PLOTTING LEGEND ARGUMENTS

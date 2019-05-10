@@ -13,28 +13,30 @@ import matplotlib.gridspec as gridspec
 from tools.nuclei import *
 
 
-def energy_plot(nucleus):
- fig = plt.figure(figsize=(19.2,10.8), dpi=100)                                                                                                                                              
- plt.suptitle(nucleus[0].sup_title) 
- gs = gridspec.GridSpec(2,3,hspace=0.4,wspace=0.3)          
- cols = 3
- for j in range(len(nucleus)): 
-  for i in range(len(nucleus[j].energies)):
-       row = (i // cols)
-       col = i % cols
-       ax = fig.add_subplot(gs[row,col]) 
-       ax.grid()
-       ax.set_title(nucleus[j].titles[i])
-       ax.set_xlabel(nucleus[j].time_label)
-       ax.set_ylabel(nucleus[j].energy_label)
-       ax.plot(nucleus[j].time,nucleus[j].energies[i],label = nucleus[j].plot_aspect.label ,
-         				      color = nucleus[j].plot_aspect.color, 
-         				      marker = nucleus[j].plot_aspect.marker, 
-         				      linestyle = nucleus[j].plot_aspect.linestyle,
-					      markevery = nucleus[j].plot_aspect.markevery)
-       if(i ==0) : ax.legend(loc='upper left',bbox_to_anchor=(-0.1,1.35))
+def energy_plot(runs):
+ for k in range(len(runs[0].runs)):
+  nucleus = [runs[0].runs[k],runs[1].runs[k]]
+  fig = plt.figure(figsize=(19.2,10.8), dpi=100)                                                                                                                                              
+  plt.suptitle(nucleus[0].sup_title) 
+  gs = gridspec.GridSpec(2,3,hspace=0.4,wspace=0.3)          
+  cols = 3
+  for j in range(len(nucleus)): 
+   for i in range(len(nucleus[j].energies)):
+        row = (i // cols)
+        col = i % cols
+        ax = fig.add_subplot(gs[row,col]) 
+        ax.grid()
+        ax.set_title(nucleus[j].titles[i])
+        ax.set_xlabel(nucleus[j].time_label)
+        ax.set_ylabel(nucleus[j].energy_label)
+        ax.plot(nucleus[j].time,nucleus[j].energies[i],label = nucleus[j].plot_aspect.label ,
+          				      color = nucleus[j].plot_aspect.color, 
+          				      marker = nucleus[j].plot_aspect.marker, 
+          				      linestyle = nucleus[j].plot_aspect.linestyle,
+         				      markevery = nucleus[j].plot_aspect.markevery)
+        if(i ==0) : ax.legend(loc='upper left',bbox_to_anchor=(-0.1,1.35))
 
- plt.savefig('energy_test.png')
+  plt.savefig('output_graphs_python/testing/'+str(runs[0].names[k])+'.png')
 
 
 def density_plot(nucleus):

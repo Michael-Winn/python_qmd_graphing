@@ -132,3 +132,14 @@ class info_for_plotting:
     	self.dmarker.append('o')
     	self.dmfc.append('none')
 	self.dmarkevery.append(15)
+class run:
+  def __init__(self) : 
+    self.runs = [] 
+    self.names = []
+    self.names.append('all')
+    self.names.append('potential')
+    self.names.append('coulomb')
+    self.names.append('kinetic')
+    self.names.append('asymmetry')
+    self.names.append('momentum_old')
+    self.names.append('momentum_optical')
