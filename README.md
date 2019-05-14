@@ -13,3 +13,6 @@ These functions and files are used to input the data created by the QMD part of 
 * [X] Look into the possibility of making the plotting_functions more compact and modular
 
 * [ ] Fix the density output in the test_new class python and change the name of the former, add the run ability to the density and plot info class
+
+
+![](momentum.gif)
