@@ -87,7 +87,12 @@ def plotting_position(time,x,y,z,iso,static):
       ax.set_xlim3d(-30,30)
       ax.set_ylim3d(-30,30)
       ax.set_zlim3d(-30,30)
-
+      if(time[j][0] > 70) : 
+	  val = time[j][0] * (35./(160.-70.))
+#	  print(val)
+	  ax.set_xlim3d(-val,val)
+      	  ax.set_ylim3d(-val,val)
+      	  ax.set_zlim3d(-val,val)
       end_time = 160
       ax2 = fig.add_subplot(gs_target[0,4]) 
       ax2.set_ylabel(r'$\rho (fm^{-3})$')

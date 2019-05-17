@@ -13,10 +13,15 @@ class nuclei :
    self.tce = []
    self.tme = []
    self.tae = []
+   self.tmpe = []
    self.rhom = []
    self.rhom_t = []
    self.rhom_p = []
+   self.rms_t = []
+   self.rms_p = []
+   self.rms_t_alt = []
    self.energies = []
+   self.special_energies = []
    self.densities = []
    self.time_label = r'time step (fm)'
    self.energy_label = r'energy (MeV)'
@@ -26,6 +31,7 @@ class nuclei :
    self.NUM = 0
    self.b_ene = 0.
    self.titles = []
+   self.special_titles = []
    self.sup_title = '' 
    self.titles.append('Variation of the TOTAL energy')
    self.titles.append('Variation of the Potential energy')
@@ -34,8 +40,14 @@ class nuclei :
    self.titles.append('Variation of the Momentum energy')
    self.titles.append('Variation of the Asymmetry energy')
 
+   self.special_titles.append('Variation of the TOTAL energy')
+   self.special_titles.append('Variation of the Potential energy' + "\n" + 'As a sum of momentum + potential')
+   self.special_titles.append('Variation of the Kinetic energy')
+   self.special_titles.append('Variation of the Coulomb energy')
+   self.special_titles.append('Variation of the Momentum energy')
+   self.special_titles.append('Variation of the Asymmetry energy')
 
-  def attribution(self,time,te,tpe,tke,tce,tme,tae,rhom_t,rhom_p) :
+  def attribution(self,time,te,tpe,tke,tce,tme,tae,rhom_t,rhom_p,rms_t,rms_p) :
    self.time = time
    self.te = te 
    self.tpe = tpe
@@ -45,16 +57,33 @@ class nuclei :
    self.tae = tae
    self.rhom_t = rhom_t
    self.rhom_p = rhom_p
-   self.energies.append(te)
-   self.energies.append(tpe)
-   self.energies.append(tke)
-   self.energies.append(tce)
-   self.energies.append(tme)
-   self.energies.append(tae)
+   self.rms_t = rms_t
+   self.rms_p = rms_p
+   self.energies.append(self.te)
+   self.energies.append(self.tpe)
+   self.energies.append(self.tke)
+   self.energies.append(self.tce)
+   self.energies.append(self.tme)
+   self.energies.append(self.tae)
+
    for i in range(len(rhom_t)):
      self.rhom.append(rhom_t[i]+rhom_p[i])
    self.densities.append(rhom_t) 
    self.densities.append(rhom_p) 
+   for i in range(len(tme)):
+    self.tmpe.append(tpe[i] + tme[i])
+  
+   self.special_energies.append(self.te)
+   self.special_energies.append(self.tmpe)
+   self.special_energies.append(self.tke)
+   self.special_energies.append(self.tce)
+   self.special_energies.append(self.tme)
+   self.special_energies.append(self.tae)
+   
+   for i in range(len(rhom_t)):
+     N = 197.
+     rms_alt = (3./(4.*np.pi)*N/(rhom_t[i]))**(1./3.)
+     self.rms_t_alt.append(rms_alt) 
 
   def set_global_attributes(self,dt,NUM,b_ene):
     self.dt = dt
@@ -136,6 +165,7 @@ class run:
   def __init__(self) : 
     self.runs = [] 
     self.names = []
+    self.special_name = 'mom_sum_pot'
     self.names.append('all')
     self.names.append('potential')
     self.names.append('coulomb')
